@@ -1,0 +1,352 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-gb" xml:lang="en-gb">
+<head>
+<meta name="style" content="cs" />
+<title>SCALE-MAMBA Software</title>
+</head>
+
+<body style='overflow:scroll;'>
+
+<h1>SCALE-MAMBA Software</h1>
+
+This web page is for the SCALE-MAMBA MPC software system developed by the
+KU Leuven. It details the background of the software,
+how to access it, and the email list associated with the software. <p>
+
+<ol>
+<li>Secure Computation Algorithms from LEuven : SCALE</li>
+<li>Multiparty AlgorithMs Basic Argot         : MAMBA</li>
+</ol>
+
+<p>
+
+Before proceeding, please note that the software is provided
+"AS IS". 
+We have no ability to provide support or help with your use of it. 
+We will try to help you, but providing such help is not our day job.
+<p>
+
+<ul>
+<li><a href="#software">The Software</a>
+<li><a href="#history">Historical Background</a>
+<li><a href="#email">Email List</a>
+<li><a href="#license">License</a>
+<li><a href="#authors">Authors, Funders and Thanks</a>
+</ul>
+<hr>
+<a name="software"></a>
+<h2>The Software</h2>
+You can download the software from the git repository
+<center>
+<a href="https://github.com/KULeuven-COSIC/SCALE-MAMBA">https://github.com/KULeuven-COSIC/SCALE-MAMBA</a>
+</center>
+The documentation for the software is available as a main
+PDF file. We suggest reading the PDF document first.
+<ul>
+<li><a href="Documentation-SCALE.pdf">The Main PDF Documentation</a></li>
+<li><a href="RustDocumentation.pdf">The SCALE-Rust Language Documentation</a></li>
+</ul>
+
+<hr>
+<a name="history"></a>
+<h2>Historical Background</h2>
+The SCALE-MAMBA system arises out of four main papers, called BDOZ, SPDZ,
+TinyOT and HSS in much of the literature. 
+<ul>
+<li><b>BDOZ</b>:<a href="http://eprint.iacr.org/2010/514">
+    Semi-Homomorphic Encryption and Multiparty Computation </a>:
+    <em>Rikke Bendlin and Ivan Damgard and Claudio Orlandi and Sarah Zakarias </em>.
+<li><b>SPDZ</b>:<a href="http://eprint.iacr.org/2011/535">
+    Multiparty Computation from Somewhat Homomorphic Encryption </a>:
+    <em>Ivan Damgard and Valerio Pastro and Nigel P. Smart and Sarah Zakarias </em>.
+<li><b>TinyOT</b>:<a href="http://eprint.iacr.org/2011/091">
+    A New Approach to Practical Active-Secure Two-Party Computation </a>:
+    <em>Jesper Buus Nielsen and Peter Sebastian Nordholt and Claudio Orlandi and Sai Sheshank Burra </em>
+<li><b>HSS</b>:<a href="https://eprint.iacr.org/2017/214">Low Cost Constant Round MPC Combining BMR and Oblivious Transfer</a>:
+<em>Carmit Hazay and Peter Scholl and Eduardo Soria-Vazquez</em>
+</ul>
+The BDOZ paper introduced the idea of using linear homomorphic encryption to
+perform pre-processing, as well as the idea of ensuring an efficient
+online protocol using information theoretic MACs.
+The SPDZ paper outlined a much more efficient online phase using a
+different form of MAC, and used somewhat homomorphic encryption
+for the pre-processing.
+The TinyOT paper is focused on two party computation, uses BDOZ style
+MACs but uses OT as the pre-processing phase. 
+The HSS paper presents efficient n-party garbling based upon the
+TinyOT protocol.
+Over the years these protocols have been extended by various people, 
+more details on these improvements can be found in the papers below.<p>
+
+The Full-Threshold LSSS based sub-system basically uses SPDZ with
+TopGear as the pre-processing engine. 
+The Q2 based LSSS sub-system uses either the method Maurer
+(see below for the paper) or the method of Keller, Rotaru, 
+Smart and Wood (see below for the paper) to perform the offline 
+phase, and then uses the paper of Smart and Wood (again see below) 
+to do the online phase. <p>
+
+The SCALE-MAMBA system has grown out of the earlier SPDZ system developed
+at the University of Bristol, and a lot of the code-base is the same.
+However, SCALE-MAMBA aims to be a complete system, and not a set of 
+components which the user needs to magically compose together.
+Therefore SCALE-MAMBA is closer to a production system, and as such
+it is not that well suited to getting specific benchmarks out of
+it for specific components (e.g. offline times on their own or online
+times on their own). This is still possible, just more tricky and needs
+a deeper understanding of the whole system.
+We hope that this will encourage more honest reporting of run-times
+in the literature. <p>
+
+In particular <b>the old SPDZ system is no longer supported!</b><p>
+
+A large body of research work has gone into the system. 
+As well as the papers detailed above the system builds on the following
+papers:
+
+<ul>
+
+<li>
+<a href="http://eprint.iacr.org/2019/1300">2019/1300</a>  ( <a href="http://eprint.iacr.org/2019/1300.pdf">PDF</a>  )
+<br><b> Actively Secure Setup for SPDZ </b>
+<br><em> Dragos Rotaru and Nigel P. Smart and Titouan Tanguy and Frederik Vercauteren and Tim Wood </em>
+
+
+<li>
+<a href="http://eprint.iacr.org/2019/974">2019/974</a>  ( <a href="http://eprint.iacr.org/2019/974.pdf">PDF</a>  )
+<br><b>Zaphod: Efficiently Combining LSSS and Garbled Circuits in SCALE </b>
+<br><em>Abdelrahaman Aly and Emmanuela Orsini and Dragos Rotaru and Nigel P. Smart and Tim Wood </em>
+
+<li>
+<a href="http://eprint.iacr.org/2019/354">2019/354</a>  ( <a href="http://eprint.iacr.org/2019/354.pdf">PDF</a>  )
+<br><b>Benchmarking Privacy Preserving Scientific Operations </b>
+<br><em>Abdelrahaman Aly and Nigel P. Smart </em>
+
+
+<li>
+<a href="http://eprint.iacr.org/2019/207">2019/207</a>  ( <a href="http://eprint.iacr.org/2019/207.pdf">PDF</a>  )
+<br><b>MArBled Circuits: Mixing Arithmetic and Boolean Circuits with Active Security</b>
+<br><em>Dragos Rotaru and Tim Wood
+</em>
+
+
+<li>
+<a href="http://eprint.iacr.org/2019/035">2019/035</a>  ( <a href="http://eprint.iacr.org/2019/035.pdf">PDF</a>  )
+<br><b> Using TopGear in Overdrive: A more efficient ZKPoK for SPDZ
+</b>
+<br><em>Carsten Baum and Daniele Cozzo and Nigel P. Smart
+</em>
+
+<li>
+<a href="http://eprint.iacr.org/2018/467">2018/467</a>  ( <a href="http://eprint.iacr.org/2018/467.pdf">PDF</a>  )
+<br><b> Error-Detecting in Monotone Span Programs with Application to Communication Efficient Multi-Party Computation 
+</b>
+<br><em> Nigel P. Smart and Tim Wood    
+</em>
+
+<li>
+<a href="http://eprint.iacr.org/2017/1230">2017/1230</a>  ( <a href="http://eprint.iacr.org/2017/1230.pdf">PDF</a>  )
+<br><b>    Overdrive: Making SPDZ Great Again 
+</b>
+<br><em> Marcel Keller and Valerio Pastro and Dragos Rotaru 
+</em>
+
+<li>
+<a href="http://eprint.iacr.org/2017/492">2017/492</a>  ( <a href="http://eprint.iacr.org/2017/492.pdf">PDF</a>  )
+<br><b>    Reducing Communication Channels in MPC 
+</b>
+<br><em> Marcel Keller and Dragos Rotaru and Nigel P. Smart and Tim Wood 
+</em>
+
+<li><a href="https://eprint.iacr.org/2017/189">2017/189</a> ( <a href="https://eprint.iacr.org/2017/189.pdf">PDF</a>)
+<br><b>Global-Scale Secure Multiparty Computation</b>
+<br><em>Xiao Wang and Samuel Ranellucci and Jonathan Katz</em>
+
+<li>
+<a href="http://eprint.iacr.org/2016/505">2016/505</a>  ( <a href="http://eprint.iacr.org/2016/505.pdf">PDF</a>  )
+<br><b>MASCOT:  Faster  Malicious  Arithmetic  Secure  Computation  with  Oblivious  Transfer</b>
+<br><em>Marcel  Keller   and  Emmanuela  Orsini   and  Peter  Scholl</em>
+
+<li>
+<a href="http://eprint.iacr.org/2015/901">2015/901</a>  ( <a href="http://eprint.iacr.org/2015/901.pdf">PDF</a>  )
+<br><b>A  Unified  Approach  to  MPC  with  Preprocessing  using  OT</b>
+<br><em>Tore  Kasper  Frederiksen    and   Marcel  Keller   and   Emmanuela  Orsini    and  Peter  Scholl</em>
+
+<li>
+<a href="http://eprint.iacr.org/2015/546">2015/546</a>  ( <a href="http://eprint.iacr.org/2015/546.pdf">PDF</a>  )
+<br><b>Actively  Secure  OT  Extension  with  Optimal  Overhead</b>
+<br><em>Marcel  Keller   and  Emmanuela  Orsini   and  Peter  Scholl</em>
+
+<li>
+<a href="http://eprint.iacr.org/2015/472">2015/472</a>  ( <a href="http://eprint.iacr.org/2015/472.pdf">PDF</a>  )
+<br><b>High  Performance  Multi-Party  Computation  for  Binary  Circuits  Based  on  Oblivious  Transfer</b>
+<br><em>Sai  Sheshank  Burra   and  Enrique  Larraia   and  Jesper  Buus  Nielsen   and  Peter  Sebastian  Nordholt   and  Claudio  Orlandi   and  Emmanuela  Orsini   and  Peter  Scholl   and  Nigel  P.  Smart</em>
+
+
+<li>
+<a href="http://eprint.iacr.org/2014/137">2014/137</a>  ( <a href="http://eprint.iacr.org/2014/137.pdf">PDF</a>  )
+<br><b>Efficient,  Oblivious  Data  Structures  for  MPC</b>
+<br><em>Marcel  Keller   and  Peter  Scholl</em>
+
+<li>
+<a href="http://eprint.iacr.org/2014/101">2014/101</a>  ( <a href="http://eprint.iacr.org/2014/101.pdf">PDF</a>  )
+<br><b>Dishonest  Majority  Multi-Party  Computation  for  Binary  Circuits</b>
+<br><em>Enrique  Larraia   and  Emmanuela  Orsini    and  Nigel  P.  Smart</em>
+
+
+<li>
+<a href="http://eprint.iacr.org/2013/143">2013/143</a>  ( <a href="http://eprint.iacr.org/2013/143.pdf">PDF</a>  )
+<br><b>An  architecture  for  practical  actively  secure  MPC  with  dishonest  majority</b>
+<br><em>Marcel  Keller   and  Peter  Scholl   and  Nigel  P.  Smart</em>
+
+<li>
+<a href="http://eprint.iacr.org/2012/642">2012/642</a>  ( <a href="http://eprint.iacr.org/2012/642.pdf">PDF</a>  )
+<br><b>Practical  Covertly  Secure  MPC  for  Dishonest  Majority –  or:  Breaking  the  SPDZ  Limits</b>
+<br><em>Ivan  Damgard   and  Marcel  Keller   and  Enrique  Larraia   and  Valerio  Pastro   and  Peter  Scholl   and  Nigel  P.  Smart</em>
+
+<li>
+( <a href="https://www.crypto.ethz.ch/publications/files/Maurer02b.pdf">PDF</a> )
+<br><b>Secure Multi-Party Computation made Simple.</b>
+<br><em>Ueli Maurer</em>
+
+</ul>
+
+In addition in the following papers we used SPDZ/SCALE in experiments.
+The lessons learned have fed back into the design of the overall system.
+
+<ul>
+
+<li>
+<a href="http://eprint.iacr/org/2020/214">2020/214</a> ( <a href="http://eprint.iacr.org/2020/214.pdf">PDF</a>  )
+<br><b>Thresholdizing HashEdDSA: MPC to the Rescue</b>
+<br><em>Charlotte Bonte and Nigel P. Smart and Titouan Tanguy</em>
+
+<li>
+<a href="http://eprint.iacr/org/2018/1045">2018/1045</a> ( <a href="http://eprint.iacr.org/2018/1045.pdf">PDF</a>  )
+<br><b>MPC Joins the Dark Side</b>
+<br><em>John Cartlidge and Nigel P. Smart and Younes Talibi Alaoui</em>
+
+<li>
+<a href="http://eprint.iacr/org/2018/1034">2018/1034</a> ( <a href="http://eprint.iacr.org/2018/1034.pdf">PDF</a>  )
+<br><b>Adding Distributed Decryption and Key Generation to a Ring-LWE Based CCA Encryption Scheme</b>
+<br><em>Michael Kraitsberg and Yehuda Lindell and Valery Osheter and Nigel P. Smart and Younes Talibi Alaoui</em>
+
+<li>
+<a href="http://eprint.iacr/org/2017/1190">2017/1190</a> ( <a href="http://eprint.iacr.org/2017/1190.pdf">PDF</a>  )
+<br><b>EPIC: Efficient Private Image Classification (or: Learning from the Masters)</b>
+<br><em>Eleftheria Makri and Dragos Rotaru and Nigel P. Smart and Frederik Vercauteren</em>
+<ul>
+  <li><a href="https://vimeo.com/340181172">Promo Video</a>
+  <li><a href="https://www.youtube.com/watch?v=C3asc0i8EPU">Demo Video</a>
+</ul>
+
+<li>
+<a href="http://eprint.iacr/org/2017/378">2017/378</a> ( <a href="http://eprint.iacr.org/2017/378.pdf">PDF</a>  )
+<br><b>Faster Secure Multi-Party Computation of AES and DES Using Lookup Tables</b>
+<br><em>Marcel Keller and Emmanuela Orsini and Dragos Rotaru and Peter Scholl and Eduardo Soria-Vazquez and Srinivas Vivek</em>
+
+<li>
+<a href="http://eprint.iacr.org/2016/542">2016/542</a>  ( <a href="http://eprint.iacr.org/2016/542.pdf">PDF</a>  )
+<br><b>MPC-Friendly  Symmetric  Key  Primitives</b>
+<br><em>Lorenzo  Grassi   and  Christian  Rechberger   and  Dragos  Rotaru   and  Peter  Scholl   and  Nigel  P.  Smart</em>
+
+<li>
+<a href="http://eprint.iacr.org/2015/467">2015/467</a>  ( <a href="http://eprint.iacr.org/2015/467.pdf">PDF</a>  )
+<br><b>The  Oblivious  Machine -  or:  How  to  Put  the  C  into  MPC</b>
+<br><em>Marcel  Keller</em>
+
+<li>
+<a href="http://eprint.iacr/org/2012/262">2012/262</a> ( <a href="http://eprint.iacr.org/2012/262.pdf">PDF</a>  )
+<br><b>Implementing AES via an Actively/Covertly Secure Dishonest-Majority MPC Protocol</b>
+<br><em>Ivan Damgard and Marcel Keller and Enrique Larraia and Christian Miles and N.P. Smart</em>
+
+</ul>
+
+
+
+<hr>
+<a name="email"></a>
+<h2>Email List Stuff</h2>
+We have a mailing list for people using the software, which is the Google Group 
+<a href="mailto:spdz@googlegroups.com">spdz@googlegroups.com</a>.
+To post to this group you need to sign up and be approved.
+<ul>
+<a href="https://groups.google.com/forum/#!forum/spdz">Archive/Join/Leave</a>
+<br>
+</ul>
+We still use the name SPDZ for the email list so as to avoid setting
+up a new one for the SCALE-MAMBA system.
+
+<hr>
+<a name="license"></a>
+<h2>License</h2>
+The license for the software can be found <a href="License.txt">here</a>.
+This is basically the BSD two clause license. 
+However, we request that any use of the software for 
+commercial purposes should be reported to the Nigel Smart.
+This is for impact and usage monitoring purposes only; so we can tell
+the original funders as to what impact their funding has had both
+academically and commercially.
+
+<hr>
+<a name="authors"></a>
+<h2>Authors, Funders and Thanks</h2>
+The following people have contributed to the code base
+<ul>Abdelrahaman Aly, 
+    Benjamin Coenen,
+    Kelong Cong, 
+    Karl Koch, 
+    Marcel Keller, 
+    Dragos Rotaru, 
+    Oliver Scherer, 
+    Peter Scholl, 
+    Nigel P. Smart, 
+    Titouan Tanguy, 
+    Tim Wood</ul>
+The following people have contributed to the mathematics underlying the code base
+<ul>Abdelrahaman Aly,
+    Carsten Baum,
+    Kelong Cong,
+    Daniele Cozzo,
+    Ivan Damgard, 
+    <br>
+    Tore Kasper Frederiksen,
+    Marcel Keller,
+    Enrique Larraia,
+    Claudio Orlandi,
+    Emmanuela Orsini,
+    <br>
+    Jesper Buus Nielsen,
+    Christian Miles,
+    Valerio Pastro,
+    Dragos Rotaru,
+    Sarah Zakarais,
+    <br>
+    Peter Scholl,
+    Nigel P. Smart,
+    Eduardo Soria-Vazquez,
+    Titouan Tanguy,
+    Tim Wood.
+</ul>
+The FHE part of the code is a specialisation of the FHE code used in
+the Gentry, Halevi, Smart paper <i>Homomorphic Evaluation of the AES Circuit</i>, 
+which was written by Halevi and Smart. 
+Thus some of this code looks very similar to some of the code that is
+currently in the HELib library of Halevi and Shoup. This is because both
+HELib and our FHE code are derived from the same parent code base. <p>
+
+Thanks need to be extended to all our co-authors, and others in the community who
+have provided moral support and intellectual ideas. A special thanks goes to the 
+team at Aarhus University (Damgard, Nielsen and Orlandi). 
+We also thank the team at Galois working on the Jana project with us, for
+providing extensive feedback and testing. 
+We also thank the team at Cosmian for helping develop the SCALE-assembler
+(scasm).
+<p>
+
+Finally the work on the project has been funded by a number of parties;
+including DARPA, EPSRC, ERC, FWO, IARPA and The Royal Society of London.
+
+
+</body>
+
+</html>

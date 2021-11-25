@@ -1,0 +1,51 @@
+% indexes document style option for producing multiple indexes
+% for use with the modified bbok style, CHbook.sty
+% Written by F.W. Long, Version 1.1, 12 August 1991.
+
+% Modified by F.W. Long, Version 1.1a, 29 August 1991
+% to get the index heading correctly spaced.
+
+% Modified by F.W. Long, Version 1.1b, 31 August 1991
+% to remove the abbreviation \ix (which should be in the document, not here).
+
+% Modified by Nigel Smart, 13th July 1998 to work with our 
+% book.  Renamed myidx.sty
+
+% Modified \makeindex and \index commands to allow multiple indexes
+% in both cases the first parameter is the index name.
+% They now work more like \@starttoc and \addcontentsline.
+% \index is no longer defined inside \makeindex but determines
+% whether the appropriate file is defined before writing to it.
+
+\def\makeindex#1{\begingroup
+  \makeatletter
+  \if@filesw \expandafter\newwrite\csname #1@idxfile\endcsname
+  \expandafter\immediate\openout \csname #1@idxfile\endcsname #1.idx\relax
+  \typeout{Writing index file #1.idx }\fi \endgroup}
+
+\def\index#1{\@bsphack\begingroup
+               \def\protect##1{\string##1\space}\@sanitize
+               \@wrindex{#1}}
+
+% \@wrindex now checks that the appropriate file is defined.
+
+\def\@wrindex#1#2{\let\thepage\relax
+   \xdef\@gtempa{\@ifundefined{#1@idxfile}{}{\expandafter
+      \write\csname #1@idxfile\endcsname{\string
+      \indexentry{#2}{\thepage}}}}\endgroup\@gtempa
+   \if@nobreak \ifvmode\nobreak\fi\fi\@esphack}
+
+% Modified \printindex command to allow multiple indexes.
+% This now takes over much of the work of \theindex.
+% Again, the first parameter is the index name.
+% The second parameter is the index title (as printed).
+
+\newif\if@restonecol
+\def\printindex#1#2{\@restonecoltrue\if@twocolumn\@restonecolfalse\fi
+  \columnseprule \z@ \columnsep 35pt
+  \newpage \twocolumn[{\Large\bf #2 \vskip4ex}]
+  \markright{\uppercase{#2}}
+  \addcontentsline{toc}{section}{#2}
+  \@input{#1.ind}}
+
+\def\see#1#2{{\em see\/} #1}

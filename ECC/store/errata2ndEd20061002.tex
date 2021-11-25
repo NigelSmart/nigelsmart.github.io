@@ -1,0 +1,291 @@
+\documentstyle[amscd,12pt,myidx,psfig]{mybook}
+\textheight 215mm
+\textwidth 138mm
+\markboth{\sc elliptic curves in cryptography}{\sc errata}
+%
+%  Macro for eps figures
+%
+\newcommand{\psXfigure}[4]{
+    \begin{figure}[tp]
+    \centerline{
+        \hbox{\psfig{figure=#1,width=#2}}
+    }
+    \caption{\label{#4}#3}
+    \end{figure}
+}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{defn}[theorem]{Definition}
+
+%Numbering
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thetheorem}{{\thechapter}.\arabic{theorem}}
+\renewcommand{\thelemma}{{\thechapter}.\arabic{lemma}}
+\renewcommand{\thecor}{{\thechapter}.\arabic{cor}}
+\renewcommand{\theprop}{{\thechapter}.\arabic{prop}}
+\renewcommand{\theconjecture}{{\thechapter}.\arabic{conjecture}}
+\renewcommand{\theexample}{\arabic{example}}
+\renewcommand{\thesection}{{\thechapter}.\arabic{section}}
+\renewcommand{\thesubsection}
+      {{\thechapter}.\arabic{section}.\arabic{subsection}}
+\renewcommand{\theequation}{{\thechapter}.\arabic{equation}}
+\renewcommand{\thefigure}{{\thechapter}.\arabic{figure}}
+\renewcommand{\thetable}{{\thechapter}.\arabic{table}}
+
+%Math symbols used
+\newcommand{\ord}{{\rm ord}}
+\newcommand{\lcm}{{\rm lcm}}
+\newcommand{\adj}{{\rm adj}}
+\newcommand{\dv}{{\rm div}}
+\newcommand{\DLog}{{\rm DL}}
+\newcommand{\DHP}{{\rm DHP}}
+
+\newcommand{\C}{{\Bbb C}}
+\newcommand{\D}{{\Bbb D}}
+\newcommand{\E}{{\Bbb E}}
+\newcommand{\F}{{\Bbb F}}
+\newcommand{\G}{{\Bbb G}}
+\newcommand{\N}{{\Bbb N}}
+\newcommand{\PP}{{\Bbb P}}
+\newcommand{\Q}{{\Bbb Q}}
+\newcommand{\R}{{\Bbb R}}
+\newcommand{\Z}{{\Bbb Z}}
+
+\newcommand{\EE}{{\cal E}}
+\newcommand{\LL}{{\cal L}}
+\newcommand{\OO}{{\cal O}}
+\newcommand{\HH}{{\cal H}}
+\newcommand{\II}{{\cal I}}
+\newcommand{\GLL}{{\G_{\LL}}}
+\newcommand{\FF}{{\cal F}}
+
+\newcommand{\ga}{{\frak{a}}}
+\newcommand{\gb}{{\frak{b}}}
+\newcommand{\gp}{{\frak{p}}}
+\newcommand{\gq}{{\frak{q}}}
+\newcommand{\gB}{{\frak{B}}}
+\newcommand{\gS}{{\frak{S}}}
+\newcommand{\hash}{{\#}}
+
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\ceilsqrt}[1]{\lceil\sqrt{#1}\, \rceil}
+\newcommand{\nth}{{\hat{h}}}
+\newcommand{\grp}[1]{{\langle #1 \rangle}}
+
+%
+% Newcommands added by GS
+%
+\newcommand{\fq}{\F_q}
+\newcommand{\fqn}{\F_{q^n}}
+\newcommand{\fp}{{\F}_p}
+\newcommand{\fqstar}{\F_q^{\,\ast}}
+\newcommand{\fqlstar}{\F_{q^l}^{\,\ast}}
+\newcommand{\fqlstarn}{(\fqlstar)^n}
+\newcommand{\fpstar}{{\F}_p^{\,\ast}}
+\newcommand{\fbp}{{\overline{\F}}_p}
+\newcommand{\fbq}{{\overline{\F}}_q}
+\newcommand{\fbtn}{\overline{\F}_{2^n}}
+\newcommand{\fbpstar}{{\overline{\F}}_p^{\,\ast}}
+\newcommand{\fbqstar}{{\overline{\F}}_q^{\,\ast}}
+\newcommand{\fl}{{\F}_{\ell}}
+\newcommand{\ft}{\mbox{$\F_2$}}
+\newcommand{\ftn}{\mbox{$\F_{2^n}$}}
+\newcommand{\tr}{\mbox{\rm Tr}}
+\newcommand{\trq}{\mbox{\rm Tr}_{q|2}}
+\newcommand{\trtn}{\mbox{\rm Tr}_{q|2}}
+\newcommand{\window}[1]{\,\underline{#1}\,}
+\newcommand{\jt}{\tilde{\jmath}\:}
+\newcommand{\Kstar}{K^{\,\ast}}
+\newcommand{\Kbar}{\overline{K}}
+\newcommand{\Kbstar}{\overline{K}^{\,\ast}}
+\newcommand{\chr}{\mbox{char}}
+\newcommand{\psib}{\overline{\psi}}
+\newcommand{\ql}{q_{\ell}}
+\newcommand{\fbar}{\overline{f}}
+
+\newcommand{\frob}{\varphi}
+\newcommand{\totient}{\phi_{\mbox{\scriptsize Eul}}}
+\newcommand{\isog}{\phi}
+\newcommand{\frobchl}{\FF_\ell}
+\newcommand{\padiclog}{\vartheta}
+\newcommand{\bino}[2]{B(#1,#2)}
+\newcommand{\Eb}{\overline{E}}
+
+\newcommand{\SL}{\mbox{\it SL}}
+\newcommand{\GL}{\mbox{\it GL}}
+\newcommand{\PGL}{\mbox{\it PGL}}
+\newcommand{\cec}{C_{\mbox{\tiny EC}}}
+\newcommand{\cconv}{C_{\mbox{\tiny CONV}}}
+
+%\newcommand{\DF}{\mbox{\em DF}}
+%\newcommand{\DFl}{\mbox{\em DF}_2}
+\newcommand{\DF}{D_g}
+\newcommand{\DFl}{D_g^*}
+%\newcommand{\DJ}{\mbox{\em DJ}}
+%\newcommand{\DJl}{\mbox{\em DJ}_2}
+\newcommand{\DJ}{D_j}
+\newcommand{\DJl}{D_j^*}
+
+\newcommand{\wt}{W}
+\newcommand{\Jc}{J_C}
+\newcommand{\Jcfq}{J_C(\fq)}
+\newcommand{\Jcfqn}{J_C(\fqn)}
+\newcommand {\eqdef} {\stackrel{\Delta}{=}}
+
+\newcommand{\End}{\mbox{\rm End}}
+\newcommand{\Gal}{\mbox{\rm Gal}}
+\newcommand{\Aut}{\mbox{\rm Aut}}
+
+\newcommand{\regtmark}{$\!^{\bigcirc \!\!\!\!\!\mbox{\rm \tiny R}}$}
+
+%
+% Redefine built-in macro \pmod to produce more pleasing spacing
+%
+\renewcommand{\pmod}[1]{\;(\mbox{\rm mod}\;#1)}
+
+
+%
+% DEFs FOR ALGORITHMS (LaTeX version)
+%
+%    (DONATED BY JOHN CREMONA, MODIFIED BY NPS.
+%    Nested line numbers, reference labels, other minor
+%    modifications added by GS.
+%
+%
+
+% Define 4 levels of nesting
+\newcounter{lineno}
+\newcounter{linelineno}[lineno]
+\newcounter{linelinelineno}[linelineno]
+\newcounter{linelinelinelineno}[linelinelineno]
+
+\newcounter{algnum}[chapter]
+\renewcommand{\thealgnum}{\thechapter.\arabic{algnum}}
+
+% Algorithm as new environment
+\newenvironment{algorithm}[3]
+{
+        \refstepcounter{algnum}
+        \bigskip\goodbreak\hrule\medskip
+                \leftline{{\sc Algorithm \thealgnum:} \bf #1}
+                \medskip\hrule\medskip\nobreak
+                \tt
+        \begin{tabbing}
+        OUTPUT: \= \kill
+        INPUT:  \>#2 \\
+        OUTPUT: \>#3
+        \end{tabbing}
+                \begin{tabbing}
+%This sets tab positions: might need adjustment!
+10.\ \=word\=word\=word\=word\=word\=word\=\kill
+                \smallskip \setcounter{lineno}{0}
+}
+{           \end{tabbing}
+            \par\nobreak\hrule\bigskip
+            \rm
+}
+
+% New line in algorithm
+\newcommand{\nline}{\refstepcounter{lineno} %
+\'\thelineno.\>%
+}
+% New line with referable label
+\newcommand{\nlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>%
+}
+
+% New line at second level
+\renewcommand{\thelinelineno}{\thelineno.\arabic{linelineno}}
+\newcommand{\nnline}{\refstepcounter{lineno}%
+\'\thelineno.\>\>%
+}
+
+% New line (2nd level) with referable label
+\newcommand{\nnlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>\>%
+}
+
+% New line at third level
+\renewcommand{\thelinelinelineno}{\thelinelineno.\arabic{linelinelineno}}
+\newcommand{\nnnline}{\refstepcounter{lineno}%
+\'\thelineno.\>\>\>%
+}
+
+% New line (3rd level) with referable label
+\newcommand{\nnnlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>\>\>%
+}
+
+% New line at 4th level
+\newcommand{\nnnnline}{\refstepcounter{lineno}%
+\'\thelineno.\>\>\>\>%
+}
+
+% New line (4th level) with referable label
+\newcommand{\nnnnlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>\>\>\>%
+}
+
+
+
+
+% Put a comment line in an algorithm, no line number.
+\def\comment{\'\em }
+
+
+%\settabs 17\columns
+
+% Define the "assignment" symbol for algorithms
+\newcommand{\asn}{\mbox{$\,\leftarrow$\,}}
+
+%
+% END OF DEFs FOR ALGORITHMS
+%
+
+
+\begin {document}
+\begin{center}
+
+\vspace{0.5in}
+
+{\Large\em Elliptic Curves in Cryptography}
+
+\vspace{0.25in}
+{\large Ian Blake, Gadiel Seroussi and Nigel Smart}
+
+\vspace{0.5in}
+
+{\Large\bf Errata}
+
+(for second edition and printings of June 2000 and later)
+
+\end{center}
+
+\vspace{0.15in}
+
+%\addtolength{\parskip}{5mm}
+
+\begin{description}
+\addtolength{\itemsep}{2mm}
+
+\item[p.\ 9] The formula for $\cconv(N)$ has a $\log 2$ missing. It
+should read
+\[
+\cconv(N) = \exp\left(\, c_0 \,(N \log 2)^{1/3} \,(\log (N \log 2) )^{2/3} \,\right).
+\]
+
+\item[p.\ 47] Line $-1$. Replace ``$a=-g_2/\sqrt[3]{4}$, $b=-g_3$'' with
+  ``$a=-g_2/4$, $b=-g_3/4$''.
+
+\item[p.\ 54] Line $11$. Replace ``for $i=1, ..., \ell + 1$'' should be
+ ``for $r=1, ..., \ell + 1$''.
+\end{description}
+
+\end {document}

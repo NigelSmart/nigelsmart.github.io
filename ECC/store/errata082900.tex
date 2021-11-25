@@ -1,0 +1,421 @@
+\documentstyle[amscd,12pt,myidx,psfig]{mybook}
+\textheight 215mm
+\textwidth 138mm
+\markboth{\sc elliptic curves in cryptography}{\sc errata} 
+%
+%  Macro for eps figures
+%
+\newcommand{\psXfigure}[4]{
+	\begin{figure}[tp]
+	\centerline{
+	    \hbox{\psfig{figure=#1,width=#2}}
+	}
+	\caption{\label{#4}#3}
+	\end{figure}
+}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{example}{Example}
+\newtheorem{defn}[theorem]{Definition}
+
+%Numbering
+\renewcommand{\thechapter}{\Roman{chapter}}
+\renewcommand{\thetheorem}{{\thechapter}.\arabic{theorem}}
+\renewcommand{\thelemma}{{\thechapter}.\arabic{lemma}}
+\renewcommand{\thecor}{{\thechapter}.\arabic{cor}}
+\renewcommand{\theprop}{{\thechapter}.\arabic{prop}}
+\renewcommand{\theconjecture}{{\thechapter}.\arabic{conjecture}}
+\renewcommand{\theexample}{\arabic{example}}
+\renewcommand{\thesection}{{\thechapter}.\arabic{section}}
+\renewcommand{\thesubsection}
+      {{\thechapter}.\arabic{section}.\arabic{subsection}}
+\renewcommand{\theequation}{{\thechapter}.\arabic{equation}}
+\renewcommand{\thefigure}{{\thechapter}.\arabic{figure}}
+\renewcommand{\thetable}{{\thechapter}.\arabic{table}}
+
+%Math symbols used
+\newcommand{\ord}{{\rm ord}}
+\newcommand{\lcm}{{\rm lcm}}
+\newcommand{\adj}{{\rm adj}}
+\newcommand{\dv}{{\rm div}}
+\newcommand{\DLog}{{\rm DL}}
+\newcommand{\DHP}{{\rm DHP}}
+
+\newcommand{\C}{{\Bbb C}}
+\newcommand{\D}{{\Bbb D}}
+\newcommand{\E}{{\Bbb E}}
+\newcommand{\F}{{\Bbb F}}
+\newcommand{\G}{{\Bbb G}}
+\newcommand{\N}{{\Bbb N}}
+\newcommand{\PP}{{\Bbb P}}
+\newcommand{\Q}{{\Bbb Q}}
+\newcommand{\R}{{\Bbb R}}
+\newcommand{\Z}{{\Bbb Z}}
+
+\newcommand{\EE}{{\cal E}}
+\newcommand{\LL}{{\cal L}}
+\newcommand{\OO}{{\cal O}}
+\newcommand{\HH}{{\cal H}}
+\newcommand{\II}{{\cal I}}
+\newcommand{\GLL}{{\G_{\LL}}}
+\newcommand{\FF}{{\cal F}}
+
+\newcommand{\ga}{{\frak{a}}}
+\newcommand{\gb}{{\frak{b}}}
+\newcommand{\gp}{{\frak{p}}}
+\newcommand{\gq}{{\frak{q}}}
+\newcommand{\gB}{{\frak{B}}}
+\newcommand{\gS}{{\frak{S}}}
+\newcommand{\hash}{{\#}}
+
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\ceilsqrt}[1]{\lceil\sqrt{#1}\, \rceil}
+\newcommand{\nth}{{\hat{h}}}
+\newcommand{\grp}[1]{{\langle #1 \rangle}}
+
+%
+% Newcommands added by GS
+%
+\newcommand{\fq}{\F_q}
+\newcommand{\fqn}{\F_{q^n}}
+\newcommand{\fp}{{\F}_p}
+\newcommand{\fqstar}{\F_q^{\,\ast}}
+\newcommand{\fqlstar}{\F_{q^l}^{\,\ast}}
+\newcommand{\fqlstarn}{(\fqlstar)^n}
+\newcommand{\fpstar}{{\F}_p^{\,\ast}}
+\newcommand{\fbp}{{\overline{\F}}_p}
+\newcommand{\fbq}{{\overline{\F}}_q}
+\newcommand{\fbtn}{\overline{\F}_{2^n}}
+\newcommand{\fbpstar}{{\overline{\F}}_p^{\,\ast}}
+\newcommand{\fbqstar}{{\overline{\F}}_q^{\,\ast}}
+\newcommand{\fl}{{\F}_{\ell}}
+\newcommand{\ft}{\mbox{$\F_2$}}
+\newcommand{\ftn}{\mbox{$\F_{2^n}$}}
+\newcommand{\tr}{\mbox{\rm Tr}}
+\newcommand{\trq}{\mbox{\rm Tr}_{q|2}}
+\newcommand{\trtn}{\mbox{\rm Tr}_{q|2}}
+\newcommand{\window}[1]{\,\underline{#1}\,}
+\newcommand{\jt}{\tilde{\jmath}\:}
+\newcommand{\Kstar}{K^{\,\ast}}
+\newcommand{\Kbar}{\overline{K}}
+\newcommand{\Kbstar}{\overline{K}^{\,\ast}}
+\newcommand{\chr}{\mbox{char}}
+\newcommand{\psib}{\overline{\psi}}
+\newcommand{\ql}{q_{\ell}}
+\newcommand{\fbar}{\overline{f}}
+
+\newcommand{\frob}{\varphi}
+\newcommand{\totient}{\phi_{\mbox{\scriptsize Eul}}}
+\newcommand{\isog}{\phi}
+\newcommand{\frobchl}{\FF_\ell}
+\newcommand{\padiclog}{\vartheta}
+\newcommand{\bino}[2]{B(#1,#2)}
+\newcommand{\Eb}{\overline{E}}
+
+\newcommand{\SL}{\mbox{\it SL}}
+\newcommand{\GL}{\mbox{\it GL}}
+\newcommand{\PGL}{\mbox{\it PGL}}
+\newcommand{\cec}{C_{\mbox{\tiny EC}}}
+\newcommand{\cconv}{C_{\mbox{\tiny CONV}}}
+
+%\newcommand{\DF}{\mbox{\em DF}}
+%\newcommand{\DFl}{\mbox{\em DF}_2}
+\newcommand{\DF}{D_g}
+\newcommand{\DFl}{D_g^*}
+%\newcommand{\DJ}{\mbox{\em DJ}}
+%\newcommand{\DJl}{\mbox{\em DJ}_2}
+\newcommand{\DJ}{D_j}
+\newcommand{\DJl}{D_j^*}
+
+\newcommand{\wt}{W}
+\newcommand{\Jc}{J_C}
+\newcommand{\Jcfq}{J_C(\fq)}
+\newcommand{\Jcfqn}{J_C(\fqn)}
+\newcommand {\eqdef} {\stackrel{\Delta}{=}}
+
+\newcommand{\End}{\mbox{\rm End}}
+\newcommand{\Gal}{\mbox{\rm Gal}}
+\newcommand{\Aut}{\mbox{\rm Aut}}
+
+\newcommand{\regtmark}{$\!^{\bigcirc \!\!\!\!\!\mbox{\rm \tiny R}}$}
+
+%
+% Redefine built-in macro \pmod to produce more pleasing spacing
+%
+\renewcommand{\pmod}[1]{\;(\mbox{\rm mod}\;#1)}
+
+
+%
+% DEFs FOR ALGORITHMS (LaTeX version) 
+%
+%    (DONATED BY JOHN CREMONA, MODIFIED BY NPS.
+%    Nested line numbers, reference labels, other minor
+%    modifications added by GS.
+%    
+%
+
+% Define 4 levels of nesting
+\newcounter{lineno}
+\newcounter{linelineno}[lineno]
+\newcounter{linelinelineno}[linelineno]
+\newcounter{linelinelinelineno}[linelinelineno]
+
+\newcounter{algnum}[chapter]
+\renewcommand{\thealgnum}{\thechapter.\arabic{algnum}}
+
+% Algorithm as new environment
+\newenvironment{algorithm}[3]
+{
+		\refstepcounter{algnum}
+		\bigskip\goodbreak\hrule\medskip
+                \leftline{{\sc Algorithm \thealgnum:} \bf #1}
+                \medskip\hrule\medskip\nobreak
+                \tt
+		\begin{tabbing}
+		OUTPUT: \= \kill
+		INPUT:  \>#2 \\
+		OUTPUT: \>#3
+		\end{tabbing}
+                \begin{tabbing}
+%This sets tab positions: might need adjustment!
+10.\ \=word\=word\=word\=word\=word\=word\=\kill
+                \smallskip \setcounter{lineno}{0}
+}
+{           \end{tabbing}
+            \par\nobreak\hrule\bigskip
+            \rm
+}
+
+% New line in algorithm
+\newcommand{\nline}{\refstepcounter{lineno} %
+\'\thelineno.\>%
+}
+% New line with referable label
+\newcommand{\nlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>%
+}
+
+% New line at second level
+\renewcommand{\thelinelineno}{\thelineno.\arabic{linelineno}}
+\newcommand{\nnline}{\refstepcounter{lineno}%
+\'\thelineno.\>\>%
+}
+
+% New line (2nd level) with referable label
+\newcommand{\nnlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>\>%
+}
+
+% New line at third level
+\renewcommand{\thelinelinelineno}{\thelinelineno.\arabic{linelinelineno}}
+\newcommand{\nnnline}{\refstepcounter{lineno}%
+\'\thelineno.\>\>\>%
+}
+
+% New line (3rd level) with referable label
+\newcommand{\nnnlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>\>\>%
+}
+
+% New line at 4th level
+\newcommand{\nnnnline}{\refstepcounter{lineno}%
+\'\thelineno.\>\>\>\>%
+}
+
+% New line (4th level) with referable label
+\newcommand{\nnnnlinelbl}[1]{\refstepcounter{lineno}\label{#1}%
+\'\thelineno.\>\>\>\>%
+}
+
+
+
+
+% Put a comment line in an algorithm, no line number.
+\def\comment{\'\em }
+
+
+%\settabs 17\columns
+
+% Define the "assignment" symbol for algorithms
+\newcommand{\asn}{\mbox{$\,\leftarrow$\,}}
+
+%
+% END OF DEFs FOR ALGORITHMS
+%
+
+
+\begin {document}
+\begin{center}
+
+\vspace{0.5in}
+
+{\Large\em Elliptic Curves in Cryptography}
+
+\vspace{0.25in}
+{\large Ian Blake, Gadiel Seroussi and Nigel Smart}
+
+\vspace{0.5in}
+
+{\Large\bf Errata}
+
+(for first and second printings\footnote{These errata have been corrected in the third printing of June 2000.})
+
+\end{center}
+
+\vspace{0.15in}
+
+%\addtolength{\parskip}{5mm}
+
+\begin{description}
+\addtolength{\itemsep}{2mm}
+
+\item[p.\ 7] Line 6 should read `finite fields and 
+a finite number of abelian varieties.
+For all practical purposes, the latter can be taken to be Jacobians of
+curves.'
+
+\item[p.\ 7] Line -3. Insert `some of' after `breaking'.
+
+\item[p.\ 14] Step 6 of Algorithm II.2 (Barrett Reduction) should be
+\[
+ 6. \;\;\mbox{\tt While  } z \geq p \;\;\;\mbox{\tt do  } z \asn z-p.  \]
+
+\item[p.\ 42] Line 6 should read
+\[ Y^2 + X Y = X^3 + a_2 X^2 + a_6. \]
+
+\item[p.\ 57] Line -1 should read
+\[ y_3 = (x_1-x_3) \lambda - y_1. \]
+
+\item[p.\ 58] Line 4 should read
+\[ y_3 = (x_1-x_3) \lambda - y_1. \]
+
+\item[p.\ 76] Line -12 should read `So, $m$ can be `divided' by $\varphi^n-1$ ...'
+
+\item[p.\ 89] Replace the first full paragraph with the following.
+
+Let $E$ denote an elliptic curve defined over the field of $p$-adic
+numbers, $\Q_p$, which is assumed to have good reduction at $p$.
+The set of points of $E(\Q_p)$ which reduce to zero modulo $p$ is
+denoted by $E_1(\Q_p)$ which is a group.
+The set of points in $E(\Q_p)$ which reduce modulo $p$ to
+an element of $E(\F_p)$ is denoted by $E_0(\Q_p)$.
+In our case of $E$ having good reduction at $p$ we have 
+$E(\Q_p) = E_0(\Q_p)$ but to remain consistent with the more general 
+literature we shall still retain the notation $E_0(\Q_p)$.
+There is the exact sequence
+
+\item[pp.\ 92--97] {\bf Rho, lambda and kangaroo methods.}
+Although the method described in Section V.5 is similar
+to schemes recently used in practical attacks on the
+ECDLP, our discussion of the rho, lambda and kangaroo methods
+does not accurately reflect their original descriptions.
+The following corrections are intended to clarify the differences
+between the methods and reduce confusion.
+
+\item[p.\ 92]
+Replace the paragraph before the start of the example with the following.
+
+The rho and lambda methods, discussed in more
+detail in the next subsection, also have complexity $O(\sqrt{n})$.
+The time to sort and search the look-up table in the BSGS method
+can be eliminated if a hash table is used instead.
+In this case, the constant multiplying $\sqrt{n}$ in the
+asymptotic estimate can be made $\frac{4}{3}$. 
+Pollard's rho method has a slightly better constant, roughly 
+$\frac{5}{4}$. However, this is only an {\em expected} running time, 
+given the randomized nature of the method. The lambda method, 
+on the other hand, has a constant of 2, again applied to
+expected running time.  The advantage of the rho and lambda methods is 
+that their storage requirements can be made arbitrarily small.
+
+
+\item[p.\ 93] {\bf Section V.5}. Change the title to 
+{\bf `Methods based on Random Walks'}.
+
+Replace the first two paragraphs of the section with the following.
+
+Pollard [{\bf 125}] gives a number of methods to solve the discrete logarithm
+problem in a variety of groups. The rho method uses a single
+random walk and waits for a cycle to occur.  By using a space-efficient 
+method to detect the cycle, the discrete logarithm can be
+found.  The wait for the cycle means that the single random walk
+can be thought of as tracing out the greek letter rho, $\rho$. 
+
+In Pollard's lambda method (often called the method of tame and wild
+kangaroos), two random walks are used, one by a tame kangaroo who jumps
+off into the wild, digs a hole and waits for the wild kangaroo to
+fall into it.  The two paths form the shape of the greek letter lambda,
+$\lambda$. The lambda method is suited to finding 
+discrete logarithms which are known to lie in a short interval.
+
+There is a parallel version of the rho method, which uses many random
+walks.  However, despite the method's name,
+the `paths' do not now look like a rho, since instead one
+looks for two paths that intersect.  The method described
+in this section is what is usually referred to as the parallel rho 
+method.
+
+The following intuitive explanation uses the analogy of jumping animals,
+since we have found this to be useful when explaining the method in
+lectures.  However, these are not the kangaroos of Pollard's method, since
+Pollard's kangaroos perform better controlled jumps. We shall call 
+our jumping animals `snarks', since they jump around in 
+a rather uncontrolled manner.
+
+\item[p.\ 94] First paragraph should be replaced with the following.
+
+To simplify the matter we take two snarks. Eventually we shall use 
+a larger number of snarks.  The two snarks are given a spade and told that they
+should dig a hole every ten or so jumps.  Where each snark jumps next
+depends on the position they are currently at, hence when one snark
+meets the path of the other (or itself) it will follow the original
+path along until it falls into one of the holes that have been dug.
+
+
+\item[pp.\ 94--96]
+Replace `kangaroo' with `snark' throughout.  Remove references to `tame' and
+`wild' snarks, since all snarks are `wild'.
+
+\item[p.\ 95]
+Line 17.  Remove `, which gives the method one of its names.'
+
+\item[p.\ 97] 
+Line -17. Remove the word `small'.
+
+\item[p.\ 98] Line -6 should read `the other supersingular curves.'
+
+\item[p.\ 104] Line -7. 
+Replace `can be significantly diminished' with `can be made
+arbitrarily small.'
+
+\item[p.\ 112] Line -5 (of the main text). 
+The inequality should be an equality.
+
+\item[p.\ 114] Footnote. Insert comma after `comments'.
+
+\item[p.\ 171] Line -11. The sum should run over $P \in C(\fbq)$.
+
+\item[p.\ 176] Line 10. Remove `, what is no surprise,'.
+
+\item[p.\ 193] In reference [37], the author is R.\ Crand{\em a}ll.
+
+
+\item[pp.\ 191--198] The following references have now appeared.
+
+[89]  {\em JLMS}, Vol 59, pp 448-460, 1999.
+
+[118] {\em Math.\ Comp.}, Vol 68, pp 1233-1241, 1999.
+
+[152] {\em J. Cryptology}, Vol 12, pp 141-151, 1999.
+
+[153] {\em J. Cryptology}, Vol 12, pp 193-196, 1999. 
+
+\end{description}
+
+\end {document}

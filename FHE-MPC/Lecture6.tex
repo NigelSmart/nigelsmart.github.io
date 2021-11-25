@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+
+\setlength{\topmargin}{0pt}
+\setlength{\textheight}{9in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\oddsidemargin}{0.25in}
+\setlength{\textwidth}{6in}
+\pagestyle{plain}
+\usepackage{amsthm}
+\newtheorem{mydef}{Definition}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{caption}
+\usepackage{array}
+\begin{document}
+
+\thispagestyle{empty}
+
+%%%% mark this version as a draft (remove for final revision) %%%%
+%\raisebox{0.6in}[0in]{\makebox[\textwidth][r]{\it
+ %DRAFT --- a final version will be posted shortly}}
+%\vspace{-0.7in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+\bf\large FHE-MPC Notes
+\end{center}
+
+\noindent
+Lecturer: Nigel Smart               %%% fill in lecturer
+\hfill
+Lecture \#6               %%% fill in lecture number here
+\\
+Scribe: Gareth Davies                 %%% fill in your name here
+\hfill
+                         %%% fill in lecture date here
+
+\noindent
+\rule{\textwidth}{1pt}
+
+\medskip
+
+\noindent \textbf{Aims}. The main purpose of this lecture is to introduce \textbf{Yao circuits} and \textbf{two-party computation}. In order to understand the 2-party protocol of Yao it is necessary to introduce the notion of \textbf{oblivious transfer}.
+\medskip
+
+\noindent \textbf{Oblivious Transfer}. In an oblivious transfer (OT) protocol, sender Alice provides two inputs, $x_0$ and $x_1$. Recipient Bob inputs a bit $b \in \{0,1\}$. Bob then outputs $x_b$ but does not know Alice's other input, whilst Alice does not ascertain which input Bob has received. In a two-party computation (2PC) protocol, Alice inputs $x$ and Bob inputs $y$, and they each want to learn functions of these two variables, say $f_A(x,y)$ and $f_B(x,y)$ respectively, without learning each other's input. 
+
+Yao's crucial result was that an effective OT protocol implies the existence of a two-party computation protocol, so now we look at exactly what this is and why it works. In this setting we describe \emph{Boolean circuits}, which consist of AND, OR, NAND, NOR, XOR and NOT gates with Boolean valued wires as inputs and outputs. Each wire comes out of a unique gate but a wire may fan-out, and thus we can represent the circuit as a collection of wires $W = \{w_1,...,w_n\}$ and a collection of gates $G = \{g_1,...,g_m\}$.
+\medskip
+
+\noindent \textbf{Two-Party Computation}. Call Alice the \emph{circuit creator} and Bob the \emph{circuit evaluator}. If Bob wants to learn $f_B(x,y)$, then Alice creates circuits $C_F(y)$ using logic gates and sends the circuits to Bob. For every wire we create two secret keys. Yao's garbled circuit construction \cite{Yao1982} is as follows:
+\begin{itemize}
+\item For each wire $y_i$ two random cryptographic keys ${k^0_i}$ and ${k^1_i}$ are selected. The first key represents an encrpytion of $0$ and the second represents encryption of $1$.
+\item For each gate we compute a ``garbled table'' representing the function of the gate on these encrypted values. An initial table for an AND gate is shown below in Table \ref{initial}.
+\end{itemize}
+
+\begin{table}[ht]\centering
+\begin{minipage}[b]{0.4\linewidth}\centering
+\begin{tabular}{l l l l}
+ \multicolumn{2}{c}{$y_0$} & \multicolumn{2}{c}{$y_1$} \\
+ \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} \\
+ \multicolumn{1}{c|}{$k_0^0$} & \multicolumn{1}{c}{$k_0^1$} & \multicolumn{1}{c|}{$k_1^1$} & \multicolumn{1}{c}{$k_1^1$} \\
+ \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} \\ \hline
+ \multicolumn{4}{|c|}{} \\
+ \multicolumn{4}{|c|}{$\wedge$} \\
+ \multicolumn{4}{|c|}{} \\ \hline
+ \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} \\
+ \multicolumn{1}{c}{} & \multicolumn{1}{c|}{$k_2^0$} & \multicolumn{1}{c}{$k_2^1$} & \multicolumn{1}{c}{} \\
+ \multicolumn{1}{c}{} & \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} \\
+ \multicolumn{4}{c}{$f_B(x,y)$} \\
+\end{tabular}
+\label{AND}
+\caption*{AND gate with its corresponding wire keys.}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.4\linewidth}\centering
+\setlength{\extrarowheight}{6pt}
+\begin{tabular}{c c | l}
+ $a$ & $b$ &  \\ \hline
+ $0$ & $0$ & Enc$_{k^0_0}$(Enc$_{k^0_1}$($k^0_2$)) \\
+ $0$ & $1$ & Enc$_{k^0_0}$(Enc$_{k^1_1}$($k^0_2$)) \\
+ $1$ & $0$ & Enc$_{k^1_0}$(Enc$_{k^0_1}$($k^1_2$)) \\
+ $1$ & $1$ & Enc$_{k^1_0}$(Enc$_{k^1_1}$($k^1_2$))
+\end{tabular}
+\caption{Initial garbled circuit table for AND gate.}
+\label{initial}
+\end{minipage}
+\end{table}
+
+\begin{itemize}
+ \item The rows are shuffled, and then Bob picks a permutation $\pi \colon \{0,1\} \rightarrow \{0,1\}$ and inserts the new column into the table, then concatenates the ``external wire value'' $\pi_a$ with the key and we drop the ``internal value''. A developed AND table with an example permutation is shown in Table \ref{table2}.
+\end{itemize}
+
+\begin{table}[ht]\centering
+\begin{tabular}{c c | l}
+ $\pi_a(a)$ & $\pi_b(b)$ &  \\ \hline
+ $0$ & $1$ & Enc$_{k^0_0}$(Enc$_{k^0_1}$($k^0_2||1$)) \\
+ $0$ & $0$ & Enc$_{k^0_0}$(Enc$_{k^1_1}$($k^0_2||0$)) \\
+ $1$ & $1$ & Enc$_{k^1_0}$(Enc$_{k^0_1}$($k^1_2||1$)) \\
+ $1$ & $0$ & Enc$_{k^1_0}$(Enc$_{k^1_1}$($k^1_2||0$))
+\end{tabular}
+\caption{Developed garbled circuit table.}
+\label{table2}
+\end{table}
+
+\begin{itemize}
+ \item For each wire $w_i$ the oblivious transfer runs as follows:
+\begin{itemize}
+ \item Alice inputs two secret keys $k_i^0,k_i^1$, B inputs $b \in \{0,1\}$,
+ \item B outputs $k_i^b$.
+\end{itemize}
+\item Finally Alice sends the value of output wire keys $k^0_2$, $k^1_2$ so Bob can confirm his evaluation the circuits.
+\end{itemize}
+\noindent The main idea of the protocol is to keep the inputs private, apart from what could be deduced from the output of the function. Thus for an AND gate, if the output is 1 then of course both inputs must have been 1, whereas if he learns that the output is 0 he learns nothing about Alice's specific inputs.
+\medskip
+
+\noindent \textbf{2PC Schemes}. One particular construction of the Yao framework is as follows \cite{Lindell2008}:
+\begin{equation}
+\text{Enc}^s_{k_1,k_2}(m) = m \oplus \text{KDF}^{[m]}(k_1,k_2,s),
+\end{equation}
+where $[m]$ is the number of bits of the output, $s$ is some string to identify the gate and output wire, and $\text{KDF} = H(k_1 || s) \oplus H(k_2 || s)$, where this is an AND gate.
+
+Other constructions benefit from the \emph{Free XOR Trick}, in which we do not need garbled circuits for XOR gates. In this method, instead of $k_a^0$ and $k_a^1$ we instead define $k_a^1 = k_a^0 \oplus R$, where $R$ is some fixed randomness that is uniform throughout the gate. Thus the output keys will commute (with the randomness) and a garbled circuit will not need to be stored.
+
+As is often the case, multiplication ($\wedge$) requires more computation than addition ($\oplus$). This scheme works if both Alice and Bob are honest, so now we look at how this may not be the case.
+\medskip
+
+\noindent\textbf{Cheating}. Bob can cheat in the oblivious transfer step and by returning an invalid $g(x,y) \oplus \alpha$. Alice can cheat by sending invalid circuit data, OT data or output wires. To counteract cheating, we could use zero-knowledge proofs at each stage (this is far too time consuming to be practical), or use the \emph{cut-and-choose} method \cite{Lindell2007}. In this framework, Alice generates $s$ circuits $\{C_F^1,...,C_F^s\}$, Bob commits to opening $T$ of them, this process is repeated $s$ times and $s-T$ circuits are deemed valid.
+\medskip
+
+\noindent\textbf{Progress}. A computer system called Fairplay \cite{Malkhi2004} was introduced in 2004, however it only dealt with honest parties. In 2008 the first implementation of systems involving honest parties was proposed \cite{Lindell2008}.
+
+At Asiacrypt 2009 the first computation of Yao circuits was introduced \cite{Pinkas2009}, and since this paper there have been numerous improvements in efficiency of the system. In this paper, the goal was to analyse a scheme in which Alice inputs a 128-bit AES key $k$, Bob inputs a 128-bit message $m$ and Bob outputs a one-round AES encryption of $m$ under $k$. The process involved 30k-45k gates, of which around $75\%$ were XOR gates and the rest required garbled tables. The table below shows the comparative computation times at each step, for the honest party and malicious party case. 
+\medskip
+
+\begin{table}[h]
+\begin{tabular}{|c c c | p{2.1cm} | p{3.4cm}|} 
+ \hline
+ Alice & & Bob & Runtime, Honest Adv. & Runtime, Malicious Adv. \\ \hline
+ Compute $C_F$ & & & 1 & 453 \\
+  & $\xrightarrow{\text{send}~C_F}$ & & 1 & 276 \\
+  & $\xleftrightarrow{OT}$ & & 3 & 35 \\
+  & & Compute Result & 2 & 350 \\ \hline
+  & & & \textbf{7 secs} & \textbf{1114 secs} \\
+ \hline
+\end{tabular}
+\caption{Runtimes for Different Stages of Protocol}
+\end{table}
+
+Using a process known as inter-weaving (not doing the steps separately) it is possible to reduce the honest case to considerably less than seven seconds. 
+
+\bibliographystyle{amsplain}
+\bibliography{/home/pgrad/csgtd/linux/Documents/library}
+
+\end{document}

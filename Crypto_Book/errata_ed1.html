@@ -1,0 +1,400 @@
+<html>
+
+<head>
+<title>Cryptography, Errata</title>
+</head>
+<BODY background="../back4.jpg"
+ TEXT="#ffffff"
+ LINK="#ffff00"
+ VLINK="#00ff00"
+>
+
+<h1>Cryptography, An Introduction : Errata to First Edition</h1>
+
+
+<table>
+<tr>
+<tr>
+<td><p align="center"><IMG SRC="../0077099877.jpg"></td>
+<td></td>
+<td>
+<a href="http://www.mcgraw-hill.co.uk/html/0077099877.html">
+   Cryptography, An Introduction </a>. <br>
+	McGraw-Hill, 2002.<br>
+	ISBN 0 077 09987 7 (PB). <br>
+</td>
+</tr>
+</table>
+
+<hr>
+
+We use LaTeX terminology when this makes things clearer <p>
+
+<ol>
+<li>Page 3: Line -5. <br>
+Replace "positive" with "non-negative".
+
+<li>Page 5: Line -2. <br>
+Insert "either" between "obtained by" and add
+"or by use of the inverse operation" after
+"group operation".
+
+<li>Page 5: Line -1. <br>
+Replace "addition every" with "addition, every positive".
+
+<li>Page 6: Line 3. <br>
+Add "Every negative integer can be obtained from a positive
+integer by use of the additive inverse.".
+Replace "In this case we say", by "Hence, we have".
+
+<li>Page 8: Line -4. <br>
+Replace $\F_p^*$ with $\Z$.
+
+<li>Page 9: After Line 19. <br>
+Insert "To ease notation we will often write $\F_p[X]/f(X)$
+for the latter ring."
+
+<li>Page 17: Line 8.<br>
+Should read
+<pre>
+  x = a (mod M)    and     x = b (mod N).
+</pre>
+
+<li>Page 18: Line -1. <br>
+Replace 2 by 4.
+
+<li>Page 19: Line -10. <br>
+"Shank's" should be "Shanks'".
+
+<li>Page 21: Line 9. <br>
+Denominator in Jacobi symbol should be $n$ and not $N$.
+
+<li>Page 27: Line -7. <br>
+Replace $g^q$ with $g^{(p-1)/q}$.
+
+<li>Page 37: Line 5. <br>
+"is a usually" should be "is usually".
+
+<li>Page 39: Line 15. <br>
+The term $a X Z^2$ should be $a X Z^4$.
+
+<li>Page 40: Line 3. <br>
+The term $a_2 X^2 Z^4$ should be $a_2 X^2 Z^2$.
+
+<li>Page 40: Line 15. <br>
+Add the line "where $d_6 = \sqrt[4]{a_6}$."
+
+<li>Page 56: Line 19. <br>
+Replace "the most famous 19th century" with
+"the most famous cipher, during the 19th century,".
+
+<li>Page 56:Line 20. <br>
+Add between "cipher" and "was a" the text
+", invented in 1553 by Giovan Batista Belaso,".
+
+<li>Page 69: Line 10. <br>
+"decided" should be "decide".
+
+<li>Page 70: Lines -17,...,-10. <br>
+Replace $M$ by $P$.
+
+<li>Page 72: Line 17. <br>
+To aid clarity
+Replace "This means for all m and all c" by 
+"This means for each m that for all c". 
+
+<li>Page 77: Line -11 and -10. <br>
+Should read
+<pre>
+   H(K) \approx 1.5, \\
+   H(C) \approx 1.9944.
+</pre>
+Replace "1.5 bits" on line -9 with "two bits". <br>
+This is repeated on Page 80 and produces the follow
+through errors <br>
+<ol>
+<li>Page 80: Line 17
+<pre>
+  H(K|C) \approx 1.9527+1.5 - 1.9944 \approx 1.4583
+</pre>
+<li>Page 80: Line 20
+<pre>
+After all there are only 1.5 bits of uncertainty about the
+key to start with, one ciphertext leaves us with 1.4583 bits
+of uncertainty. Hence, 1.5-1.4583 = 0.042 bits of information
+about the key are revealed by a single ciphertext.
+</pre>
+</ol>
+
+<li>Page 79: Line 14. <br>
+Remove the minus sign.
+
+<li>Page 82: Line 6. <br>
+Should be "On** up** a t**e t**re **s a **rl **ll** **ow **it*."
+
+<li>Page 89: Line -2. <br>
+Replace "Kerchhoff's" with "Kerckhoffs'".
+Also needed on Page 120 Line -5 and in the index on Page 431.
+
+<li>Page 103: Line 15. <br>
+Replace "of degree three" with "of degree less than four".
+
+<li>Page 104: Main matrix equation. <br>
+Need to add the column vector $(1,1,0,0,0,1,1,0)$.
+Doh!!! How stupid can I be.
+
+<li>Page 105: Line 6. <br>
+"degree 3" should be "degree 3 (or less)".
+
+<li>Page 115: Figure 5.19. <br>
+This picture is wrong. The corrected picture can be found in
+our Advanced Crypto course web site, the bit on stream ciphers.
+
+<li>Page 117: Main matrix equation. <br>
+Second row of right hand column vector should be $s_{L+1}$.
+
+<li>Page 121: Exercise 5.3.1. <br>
+The blue $k$ in the first displayed equation should be in red.
+
+<li>Page 156: Line -2. <br>
+Replace "of order divisible by" with "of prime order".
+
+<li>Page 156: Line -1. <br>
+Replace with 
+<pre>
+   g = r^{(p-1)/q} \ne 1 \mbox{ for some } r \in \F_p^*.
+</pre>
+
+<li>Page 164: Add Exercise 7.3.8. <br>
+Show that the RSA algorithm also works when the message
+is taken from the set $\{0, \ldots, N-1 \}$ as opposed
+to the set $(\Z/N\Z)^*$ as used in the text.
+
+<li>Page 166: Line 14. <br>
+Replace $177$ with $355$.
+
+<li>Page 166: Line 15. <br>
+Insert "odd" before "numbers of size $2^{512}$".
+
+<li>Page 169: Replace the given Miller-Rabin algorithm with
+<pre>
+Write n-1 = 2^s m , with m odd;
+for (j=0; j &lt k; j++)
+  { Pick a from [2,..,n-2]
+    b=a^m mod n;
+    if (b!=1 && b!=(n-1))
+      { i=1;
+        while (i &lt s && b!=(n-1))
+          { b=b^2 mod n;
+            if (b==1) { Output (Composite,a); }
+            i++;
+          }
+        if (b!=(n-1)) { Output (Composite,a); }
+      }
+  }
+Output "Probable Prime";
+</pre>
+
+<li>Page 172: Line 5. <br>
+Replace $p=1$ with $p=2$.
+
+<li>Page 177: Line 8. <br>
+Replace $B=$ with $F=$.
+
+<li>Page 192: Lines 11 and 26. <br>
+Replace $337$ by $397$.
+
+<li>Page 198: Lines 10,14,15,16.  <br>
+Replace $\F_{607}$ by $\F_{607}^*$.
+Same on Page 200 Line 19.
+
+<li>Page 216: Lemma 10.1 <br>
+This is actually false, there is a counter example, pounted out by
+Ron Rivest and Christopher Peikert, and to be found in HAC p 320.<p>
+
+Let $g$ denote a collision resistant hash function with outputs
+of bit length $n$.
+Define a new hash function $h(x)$ with outputs of bit length $n+1$
+to be $0 \Vert x$ if $|x|=n$ and to be $1 \Vert g(x)$ otherwise.
+This is collision resistant but is not one-way, since we can
+invert half of the range of $h$. <p>
+
+Hence, having an oracle which breaks one-wayness may not help
+in finding collisions. <p>
+
+However, the Lemma is true if one assumes that the oracle which
+breaks the one-way property can find a preimage <i>for almost every
+element</i> in the range of $h$.
+
+
+<li>Page 237: Line 12. <br>
+Replace "multiplication" with "multiplications".
+
+<li>Page 240: Lines 10-15. <br>
+Since the idea in the sliding window method is to use exponents that 
+are at least w apart, the decomposition here is wrong and should
+have been 
+<pre>
+  215 = 27+5·24+7. 
+</pre>
+Some of the following execution steps are therefore also wrong. 
+The first four steps should have been
+<pre>
+      y=1 (unchanged), 
+      y=y·x=x^1, 
+      y=y^8=x^8, 
+      y=y·x^5=x^{13}, 
+</pre>
+from where it continues as in the text. 
+
+<li>Page 243: Line -13. <br>
+Remove "obtain".
+
+<li>Page 246: Lines -9, -10 and -16 <br>
+Replace x[i] with r[i].
+
+<li>Page 247: Line 18. <br>
+To explain the N that suddenly appears here, replace 
+"We then" by "To do arithmetic modulo N we". 
+
+<li>Page 249: Line -11. <br>
+In the eduction program
+replace the command 
+<pre>
+  z+=u*N*b;
+</pre>
+by the two commands 
+<pre>
+  z+=u*N; z*=b;
+</pre>
+
+<li>Page 252: Line -6. <br>
+"if we choose" should more precisely be "if we may choose", 
+since for some values of n (such as n=73 or 103) this is not possible. 
+
+<li>Page 253: Line -18. <br>
+First line of multiplication program
+<pre>
+  z=0; i=0;
+</pre>
+should be expanded to 
+<pre>
+  z=0; i=0; ans=0;
+</pre>
+
+<li>Page 283: Line 6. <br>
+Insert "only" before "after".
+
+<li>Page 283: Proof of Lemma 13.2. <br>
+This depends on your attack model for binding.
+If the sender is in control of the selection of both
+the originally committed value and the replacement value.
+then you actually need collision-resistance, and not just
+second-preimage resistance, in order to guarantee computational
+binding. 
+
+<li>Page 284: Line 8. <br>
+Insert "The scheme based given by $B_a(x)$ is called
+Pedersen's scheme". Also insert index entry to
+Pedersen's scheme for this page.
+
+<li>Page 284: Lemma 13.3. <br>
+General comment. For $B(x)$ to be concealing we need
+the space of all possible committed values $x$ to be
+computationally impossible to search.
+Hence, we are implicitly assuming that $x$ is chosen
+uniformly at random from the set of integers
+modulo $q$.
+
+<li>Page 298: Line 4. <br>
+Should be $p_0 = a_0$ and $q_0=1$. 
+
+<li>Page 298: Line -12. <br>
+"small encryption exponent d" should be "small decryption exponent d". 
+
+<li>Page 303: Line -7. <br>
+"via a unimodular transformation" should be 
+"via a unimodular integer transformation". 
+
+<li> Page 305: Line -15. <br>
+"be a positive" should be "be positive". 
+
+<li> Page 307: Line 2. <br>
+If we set $b_1 = A u$ with $u=(u_1,...,u_6)$ then $h(x)$ on
+line 2 should be replaced with the $b_1^{(i)}$'s equal to
+$u_i$.
+
+<li> Page 308: Line -14. <br>
+Should be $m_1 = f(m_2) \pmod{N}$.
+
+<li>Page 310: Line -5. <br>
+"half of the most significant bits" should more precisely 
+be expressed as "the upper (most significant) half of the bits". 
+
+<li>Page  310: Line -2. <br>
+"0 \lt i \le e" should be "0 \lt i \lt e". 
+
+<li>Page 311. Line 4. <br>
+Replace sentance with "Now when $e=3$ it is clear that $k$
+must be even, and so we must have $k=2$ and so..."
+
+<li>Page 311. Line -6. <br><
+Replace "an even" with "a". 
+
+<li>Page 312. Line 1. <br>
+Remove "even".
+
+<li>Page 317: Line 2. <br>
+"encrypted under the private key x corresponding to y" 
+should be "encrypted under y". 
+
+<li>Page 317: Line -5. <br>
+As in the other occurrences, the index in c_b should be red.
+
+<li>Page 319: Line -3. <br>
+"given" should be "given the ciphertext C of". 
+
+<li>Page 324: Line -9. <br>
+In the set formula, a should be x. 
+
+<li>Page 336: Line 5. <br>
+In the formula, \ge should be strict \gt, 
+and for clarity the outer index i should be changed to j so that 
+the formula becomes
+<pre>
+    w_j \gt sum_{i=1}^{j-1} w_i. 
+</pre>
+
+
+<li>Page  338: formula in the middle. <br>
+In the formula for the norm of y with square roots and two equality signs, 
+the last "=" should be \lt. 
+
+<li> Page 361: Line 1. <br>
+Replace G with V.
+
+<li>Page 386: Line -1. <br> 
+Swap $id_A$ and $id_B$.
+
+<li>Page 393. Line 3. <br>
+Add "when $m=n$ we often write $M_n$ instead of $M_{n \times n}$.
+
+<li>Page 401. Line -1, -2. <br>
+Replace with
+"A ring is an additive finite abelian group with an extra operation,
+usually denoted by multiplication, such that the multiplication 
+operation is associative and has an identity element".
+</ol>
+
+
+Thanks to Nils Andersen, Harald Baier, Colin Boyd, Reza Rezaeian Farashahi,
+Ellen Jochemsz, Bruce McIntosh, Dan Page, Christopher Peikert, Ron Rivest
+and the students at Bristol for finding the above.
+
+<hr>
+
+Nigel Smart<p>  
+
+</body>
+
+</html>

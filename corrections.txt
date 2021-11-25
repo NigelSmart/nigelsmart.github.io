@@ -1,0 +1,52 @@
+Corrections for the book
+"Algorithmic Resolution of Diophantine Equations"
+=================================================
+
+NB :-
+Lots of corrections implies either loads of readers and/or loads
+                           of mistakes
+and
+few corrections implies either few readers and/or few mistakes.
+
+This file is not html/ps/LaTeX to make it easier to use by all
+people. Sorry if this looks ugly, I would rather it be useful
+than pretty.
+
+=================================================
+
+Page 63
+ Line 8 "q_{k-1}=p_k-a_0 p_k" should read "q_{k-1}=p_k-a_0 q_k". 
+ Line 11 should read " = p_k(p_k - a_0 q_k) - q_k(N q_k - a_0 p_k)".
+  
+Page 194
+ Line -14. Remove "$\le \mu_r \alpha T^2$".
+
+Page 195
+ Line -1.  "with kernel $E(\Q)$" should be "with kernel $2 E(\Q)$".
+
+Page 201
+ Line -15. Replace $a_i$ in the numerator for $\sin \phi_{i+1}$ by $a_{i+1}$.
+
+Page 210
+ Lines -1. This equation has now been done by R. Stroeker and B.M.M. de Weger
+           "Solving elliptic diophantine equations: the general cubic case",
+           Acta. Arith., Vol 87, pp 339-365.
+
+Page 230
+ Line 9.  Let $\Delta \in \C$ with $|\Delta - 1 | \le a < 1$. Then
+ Line -1. ... if $a \le 0.5$ then ...
+
+Page 232
+ Reference [41]  Has appeared:
+ 	Math. Comp., Vol 68, pp 1187-1200, 1999.
+
+Page 237
+ Reference [177]  Remove second occurance of "Group".
+
+Page 239
+ Reference [214]  This has appeared in Publ Math Barcelona, not Publ 
+                  Math Debrecen.
+
+
+
+Thanks to H. Cohen, M. Joye, M. Kida and B.M.M. de Weger.

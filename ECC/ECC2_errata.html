@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<title>ECC2, Errata</title>
+</head>
+<BODY background="../back4.jpg"
+ TEXT="#ffffff"
+ LINK="#ffff00"
+ VLINK="#00ff00"
+>
+
+<h1>ECC2 : Errata</h1>
+
+<table>
+<tr>
+<td><p align="center"><IMG SRC="../Advances.jpg", width="146" height="220"></td></td>
+<td></td>
+<td></td>
+<td>
+<a href="http://www.cambridge.org/aus/catalogue/catalogue.asp?isbn=052160415X">
+     Advances in Elliptic Curve Cryptography</a>
+    (Edited with I.F. Blake and G. Seroussi). <br>
+    London Mathematical Society Lecture Note Series. <br>
+    Cambridge University Press, 2004. <br>
+    ISBN: 0 521 60415 X (PB). <br>
+</td>
+</tr>
+</table>
+
+<hr>
+
+We use LaTeX terminology when this makes things clearer <p>
+
+<ol>
+<li> Page 11, Algorithm 1.5: <br>
+
+In OUTPUT replace <pre>A shared secret $G$</pre> with 
+<pre>A shared secret $Q$</pre>
+
+Also in line 1 of the algorithm replace $\log_2(#K)$ with
+$\log_2(q)$. <p>
+
+<li> Page 26, line -5: <br>
+
+Replace <pre>t^{-1} H(m)</pre> by <pre>t H(m)</pre>
+
+<li> Page 112, displayed formula at the bottom:<br>
+
+The formulae for $\alpha_{i+1}$ and $\beta_{i+1}$ is wrong and should
+read: <br>
+<pre>
+\begin{equation*}
+\begin{split}
+\alpha_{i+1} & =  -30 x_Q2 - 5 x_Q - 9 A_{i+1}  , \\
+\beta_{i+1}  & =  -70 x_Q3 - 20 x_Q2 - (42 A_{i+1} + 1) x_2 - 2A_{i+1} - 27 B_{i+1} .\\
+\end{split}
+\end{equation*}
+</pre>
+Furthermore, one first has to translate the $x$-axis to
+get rid of the quadratic term and then apply (VI.4) which then gives
+<pre>
+\[ c_i2 = \frac{(48 A_i - 1)(864 \beta_{i+1} - 72 \alpha_{i+1} + 1)}
+{(864B_i - 72A_i + 1)(48 \alpha_{i+1} - 1)}\cdotp \]
+</pre>
+
+<li> Page 189, line -11: <br>
+$L$ should be replaced by $L^*$ so that the conclusion reads 
+<pre>"we have $L^* \subseteq $(\F_{q^k}^*)^r$."</pre>
+
+<li> Page 190, line 8: <br>
+Change $P \in E( {\mathbb F}_q )$ to $P \in E( {\mathbb F}_{q^k} )$. <p>
+
+<li> Page 190, line 20: <br>
+Change `function over ${\mathbb F}_q$' to `function over ${\mathbb F}_{q^k}$'. <p>
+
+</ol>
+
+Thanks to Shahab Mirzadeh, Paul Morrissey, Andreas Peter and Edlyn Teske.
+
+<hr>
+
+Nigel Smart<p>
+
+</body>
+
+</html>
+

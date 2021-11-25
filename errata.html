@@ -1,0 +1,203 @@
+<html>
+
+<head>
+<title>Cryptography Made Simple: Errata</title>
+</head>
+<BODY background="back4.jpg"
+ TEXT="#ffffff"
+ LINK="#ffff00"
+ VLINK="#00ff00"
+>
+
+<h1>Cryptography Made Simple: Errata</h1>
+
+
+<table>
+<tr>
+<td><p align="center"><IMG SRC="SimpleCover.jpg", width="146" height="220"></td>
+<td></td>
+<td></td>
+<td>
+<a href="http://www.springer.com/us/book/9783319219356">
+Cryptography Made Simple.</a><br>
+    Springer International Publishing, 2015. <br>
+    ISBN: 978-3-319-04041-7. <br>
+</td>
+</tr>
+</table>
+
+<hr>
+
+We use LaTeX terminology when this makes things clearer <p>
+
+<ol>
+<li>Page 5: Line 5.<br>
+Missing 2 in the denominaotor of the first term.
+<li>Page 10: Figure 1.1.<br>
+The number by the line connecting F_{p^2} and F_{p^4}
+should be 2 not 4.
+<li>Page 15: Algorithm 1.2.<br>
+The penultimate line should assign t' and s' to x and y,
+and not t and s.
+<li>Page 24: Line 5. <br>
+Should be \frac{n \cdot (n-1)}{2 \cdot m} \le \frac{n^2}{2 \cdot m}
+<li>Page 76: Line -12. <br>
+Should be a_2 \cdot X^2 not a_2 \cdot X in the equation.
+<li>Page 166. Lemma 9.2. <br>
+This should clearly be stated as `if and only if'.
+<li>Page 205: Line -1. <br>
+g:M->{0,1} should be g:P->{0,1}.
+<li>Page 210: Theorem 11.8. <br>
+The algortihm B should be against m-IND-CCA. With the number of
+LR-queries of B equal to the number of RoR queries of A.
+<li>Page 211: Theorem 11.9. <br>
+The algortihm A should be against m-IND-CCA. With the number of
+RoR-queries of B equal to the number of LR queries of A.
+<li>Page 218: Line 7. <br>
+Spelling mistake. Should be UnForgeable.
+<li>Page 245: Theorem 13.1. <br>
+2<sup>64</sup> should be 2<sup>56</sup> in both cases; 
+but note the use of the word "about".
+<li>Page 226: Number of small typos on this page. <br>
+A corrected page is <a href="Crypto_Book/p226.pdf">here</a>.
+<li>Page 232: Figure 12.9.<br>
+States s_{12} and s_{14} are swapped around.
+<li>Page 234: Line -1.<br>
+"described" is spelt wrong.
+<li>Page 238: Lines 6,7, 8 and 12 <br>
+Mistyping means the equations make Trivium linear! The
+correct equations are.
+<center>
+a_i = c_{i-111} + c_{i-110} \cdot c_{i-109} + c_{i-66} + a_{i-69} <br>
+b_i = a_{i-93} + a_{i-92} \cdot a_{i-91} + a_{i-66} + b_{i-78} <br>
+c_i = b_{i-84} + b_{i-83} \cdot b_{i-82} + b_{i-69} + c_{i-87} <br>
+r_i = c_{i-111} + a_{i-93} + b_{i-84} + b_{i-69} + c_{i-66} + a_{i-66}  <br>
+</center>
+<li>Page 257: The estimation of winning the ECB game for a PRP is
+        correct, but the proof is wrong. 
+        A corrected page is <a href="Crypto_Book/p257.pdf">here</a>.
+<li>Page 259: The proof of CBC mode has a number of bugs.
+       The corrected pages are <a href="Crypto_Book/p259.pdf">here</a>.
+<li>Page 264: Line -9. <br>
+Replace "a new nonce" with "another nonce".
+<li>Page 265: Theorem 13.11.<br>
+The theorem is stated for the Random-IV variant,
+which should go in the theorem statement.
+The sentence afterwards should say that the above advantage
+statement <i>also</i> applies in the nonce-based setting
+assuming the restriction of the nonce (on the previous
+page) is respected.
+<li>Page 271: Line 11 of first main paragraph. <br>
+Replace O(2^t) with \Omega(2^t).
+<li>Page 277: Line 15. <br>
+Padding method four could also be used here.
+<li>Page 281: Algorithm 14.3. <br>
+There is an unfortunate double use of the letter f to
+denote both the round function for SHA-1 and the bit-wise
+operations used to define the round function. Hopefully
+the usage of the letter f is clear from the context.
+<li>Page 285: Line 7. <br>
+Should be "we first pad m out to a multiple of b using zero's
+(i.e. we apply padding method zero)".
+<li>Page 288: Figure 14.8 <br>
+In the box containing pad_4 it should be clearer that this
+is added onto k||m and not just the padding passed through.
+So the box should probably be
+<center>
+   k||m||pad_4(|k||m|,r)
+</center>
+<li>Page 315: Line 2 and 3. <br>
+Should be "If b=b'" then algorithm B returns that
+j is not a quadrative residue, otherwise it returns that
+it is".
+<li>Page 315: Line 8. <br>
+Swap the two probabilities on this line around to make it match in
+order with the line which follows.
+<li>Page 319: Line 3. <br>
+The group order should be \phi(N^2)=... not \phi(N)=....
+<li>Page 321: Line -5. <br>
+Should be \log_{256} not \log_{8}
+<li>Page 327: Line 1. <br>
+Should be "Note that C's target..."
+<li>Page 327: Line 2. <br>
+Should be "... unless B aborts..."
+<li>Page 327: Line 4. <br>
+Should be "... winning (or loosing) their game."
+<li>Page 333: Line -1. <br>
+Replace both occurances of s with h.
+<li>Page 335: Line -12. <br>
+The public key h should be y.
+<li>Page 336: Lines 1,6,9. <br>
+The public key h should be y.
+<li>Page 337: Lines 10 and 19. <br>
+The public key h should be y.
+<li>Page 412: Line -2. <br>
+Replace F_p with F_q.
+<li>Page 422: Second displayed equation should read
+$c_2 \oplus H({c_1}^x) = m \oplus H(h^k) \oplus H({c_1}^x) = m \oplus H(g^{xk}) \oplus H(g^{kx}) = m $.
+<li>Page 437: Line 13. <br>
+The parties compute the final tally by taking t+1 values and not t.
+<li>Page 444: Last paragraph replace with...
+<ul>
+In our example we can now assess what party B has learnt from
+the computation.
+Party B knows that the output of the final OR gate is zero,
+which means that the inputs must also be zero, which means
+that the output of the AND gate is zero and the output of
+the exclusive-or gate is zero.
+However, since party B knows the output of the AND gate is
+zero and his own input was one, then party A's first
+input wire must be zero.
+In addition, party B also learns that party A's second input wire
+also represented zero, since otherwise the exclusive-or gate would not
+have output zero.
+Thus the output (and Party B's input) totally reveals Party A's inputs.
+This is what we meant by a protocol keeping the inputs private,
+bar what could be deduced from the output of the function.
+</ul>
+<li>Page 447: Multiple corrections and clarifications.
+<ol>
+<li>Line 11:<br> 
+Change "each party obtains its row" to "each party obtains its column".
+<li>First table: <br>
+Swap the row/column labels i and j around.
+<li>First line after first table change to: <br>
+"As an exercise you should work out the associated polynomial corresponding
+to each row. For example the polynomial for the first row/variable is given by
+$68 \cdot X^2 + 57 \cdot x + 20$."   <br>
+(Where all numbers are encoded in red)
+<li>Line 3 and 4 after first table change to: <br>
+"by each multiplying the first two elements in their column of the above table"
+<li>Before second table add the line: <br>
+"For example the value $33 = 44 \cdot 26 \pmod{101}$ obtained by party one,
+is shared by them using the polynomial $2 \cdot X^2 + 57 \cdot X + 33$,
+resulting in the six shares $(92,54,20,91,65,43)$."<br>
+(Where all numbers are encoded in red)
+<li>After the second table change the line to: <br>
+"Each party then takes the six values obtained (i.e. it's column)
+and recovers..."
+</ol>
+</ol>
+
+Thanks to
+Joan Boyar,
+Robin Geelen,
+Jochem Hoes,
+Peter Kovary,
+Bart Preneel,
+George Stephanides,
+Jose Vanterpool, 
+Tom Verhoeff,
+Jianrui Xie,
+Kelvin Zhang,
+and
+Fangyi Zhou
+for finding the above.
+
+<hr>
+
+Nigel Smart<p>  
+
+</body>
+
+</html>

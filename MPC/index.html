@@ -1,0 +1,453 @@
+<html>
+<body>
+
+<h1>'Bristol Fashion' MPC Circuits</h1>
+
+If you are looking for the old 'Bristol Format' circuits please
+see <a href="old-circuits.html">here</a>. 
+We call this new format 'Bristol Fashion' as it is related to
+the old format, which was called 'Bristol Format' by some
+others (as they were originally hosted in Bristol).
+The new format is tidier than the old format, which also
+is a justification for the new name of
+<a href="https://wordhistories.net/2017/10/18/shipshape-bristol-fashion/">
+Bristol Fashion</a>.
+<p>
+
+Our new format is utilized in the SCALE-MAMBA software system to define 
+the circuits for garbling.
+The new format is designed to be independent of the number of parties,
+and to capture more the nature of the function we are evaluating. <p>
+
+The `basic' format is defined by a list of gates. 
+Each gate has one or two input wires (INV/NOT/EQ/EQW gates have only 
+one input wire, XOR and AND have two input wires). 
+A gate can have only one output wire.
+The `extended' format allows addition MAND gates, standing for Multiple AND,
+these have an arbitrary number of inputs and outputs (see below for
+details).
+
+
+Each file is of the following format:
+
+<ul>
+<li> A line defining the number of gates and then the number of wires in the circuit.
+<li> The number of input values niv  
+    (e.g. if doing z=a+b mod p we have niv=3, one input each for a, b and p).
+  <ul>
+     <li> Then niv numbers defining the number of input wires per input value: ni_1,..,ni_niv
+  </ul>
+<li> The number of output values nov 
+    (e.g. if doing z=a+b mod p we have nov=1, corresponding to z).
+  <ul>
+     <li> Then nov numbers defining the number of output wires per output value: no_1,...,no_nov
+  </ul>
+<li> The gates are then given in topological order, so we can evaluate them in sequence.
+<li> Each gate is defined by 
+  <ul>
+    <li>  Number input wires   (1 or 2, unless a MAND gate)
+    <li>  Number output wires  (Always 1, unless a MAND gate)
+    <li>  List of input wires
+    <li>  List of output wires
+    <li>  Gate operation (XOR, AND, INV, EQ, EQW or MAND).
+  </ul>
+  This is a bit redundant, as the first two entries can be inferred from
+  the last, but we keep this for backwards compatibility reasons
+  <ul>
+  <li> So for example
+    <pre>
+           2 1 3 4 5 XOR
+    </pre>
+    corresponds to
+    <pre>
+         w_5 = XOR(w_3,w_4)
+    </pre>
+  <li> We also use 
+    <pre>
+           1 1 0 3 EQ 
+           1 1 1 4 EQ 
+    </pre>
+    to say that wire 3 is assigned the value 0 and wire 4 the value 1
+   <li> And we use
+     <pre>
+           1 1 0 4 EQW
+     </pre>
+      to say wire 4 should equal wire 1
+   <li>The MAND gate is a multiple AND gate it takes 2n input wires and
+       produces n output wires. A gate of the form
+       <pre>
+            4 2 0 2 1 3 4 5 MAND
+       </pre>
+       executes the two MAND operations concurrently...
+       <pre>
+            2 1 0 1 4 AND
+            2 1 2 3 5 AND
+       </pre>
+    <li>We call a circuit without MAND gates a `basic' Bristol Fashion circuit,
+       and when we have MAND gates we say it is an `extended' Bristol Fashion
+       circuit.
+  </ul>
+</ul>
+Note:
+<ol>
+<li> The wire numbering is ordered so that the first i_0 wires correspond to the
+     first input value, the next i_1 wires correspond to the second input value
+     and so on.
+<li> With the last (o_0+...+o_{n-1}) wires corresponding to the outputs of the function,
+     where n=no_1+...+no_nov
+</ol>
+
+Currently we only have a few circuits available, more will be added
+as time goes by.
+The <em>depth</em> below gives the number of AND/MAND gates in the
+extended format file. This corresponds to the AND-depth of the circuit.
+The number of AND gates corresponds to the number of {\em individual}
+ANDs, i.e. the number of ANDs in the basic format file.
+
+<h3>Arithmetic Functions</h3>
+
+<center>
+<table border="1">
+<tr>
+<td><b>Function</b></td>
+<td><b>Basic Circuit File</b></td>
+<td><b>Extended Circuit File</b></td>
+<td><b>No. ANDs</b></td>
+<td><b>No. XORs</b></td>
+<td><b>No. INVs</b></td>
+<td><b>Depth</b></td>
+</tr>
+<tr>
+<td>64-bit Adder</td>
+<td><a href="adder64.txt">adder64.txt</a></td>
+<td><a href="MAND/adder64.txt">adder64.txt</a></td>
+<td>63</td>
+<td>313</td>
+<td>0</td>
+<td>63</td>
+</tr>
+<tr>
+<td>64-bit Subtract</td>
+<td><a href="sub64.txt">sub64.txt</a></td>
+<td><a href="MAND/sub64.txt">sub64.txt</a></td>
+<td>63</td>
+<td>313</td>
+<td>63</td>
+<td>63</td>
+</tr>
+<tr>
+<td>64-bit Negation</td>
+<td><a href="neg64.txt">neg64.txt</a></td>
+<td><a href="MAND/neg64.txt">neg64.txt</a></td>
+<td>62</td>
+<td>63</td>
+<td>64</td>
+<td>62</td>
+</tr>
+<tr>
+<td>64x64 -> 64 bit Multiplier</td>
+<td><a href="mult64.txt">mult64.txt</a></td>
+<td><a href="MAND/mult64.txt">mult64.txt</a></td>
+<td>4033</td>
+<td>9642</td>
+<td>0</td>
+<td>63</td>
+</tr>
+<tr>
+<td>64x64 -> 128 bit Multiplier</td>
+<td><a href="mult2_64.txt">mult2_64.txt</a></td>
+<td><a href="MAND/mult2_64.txt">mult2_64.txt</a></td>
+<td>8128</td>
+<td>19904</td>
+<td>0</td>
+<td>127</td>
+</tr>
+<tr>
+<td>64x64-bit Division (Signed)</td>
+<td><a href="divide64.txt">divide64.txt</a></td>
+<td><a href="MAND/divide64.txt">divide64.txt</a></td>
+<td>4664</td>
+<td>24817</td>
+<td>445</td>
+<td>4158</td>
+</tr>
+<tr>
+<td>64x64-bit Division (Unsigned)</td>
+<td><a href="udivide64.txt">udivide64.txt</a></td>
+<td><a href="MAND/udivide64.txt">udivide64.txt</a></td>
+<td>4285</td>
+<td>12603</td>
+<td>64</td>
+<td>2205</td>
+</tr>
+<tr>
+<td>64-bit Equal to Zero Test</td>
+<td><a href="zero_equal.txt">zero_equal.txt</a></td>
+<td><a href="MAND/zero_equal.txt">zero_equal.txt</a></td>
+<td>63</td>
+<td>0</td>
+<td>64</td>
+<td>6</td>
+</tr>
+</table>
+</center>
+
+
+<h3>Cryptographic Functions</h3>
+
+<center>
+<table border="1">
+<tr>
+<td><b>Function</b></td>
+<td><b>Basic Circuit File</b></td>
+<td><b>Extended Circuit File</b></td>
+<td><b>No. ANDs</b></td>
+<td><b>No. XORs</b></td>
+<td><b>No. INVs</b></td>
+<td><b>Depth</b></td>
+</tr>
+<tr>
+<td>AES-128(k,m)</td>
+<td><a href="aes_128.txt">aes_128.txt</a></td>
+<td><a href="MAND/aes_128.txt">aes_128.txt</a></td>
+<td>6400</td>
+<td>28176</td>
+<td>2087</td>
+<td>60</td>
+</tr>
+<tr>
+<td>AES-192(k,m)</td>
+<td><a href="aes_192.txt">aes_192.txt</a></td>
+<td><a href="MAND/aes_192.txt">aes_192.txt</a></td>
+<td>7168</td>
+<td>32080</td>
+<td>2317</td>
+<td>72</td>
+</tr>
+<tr>
+<td>AES-256(k,m)</td>
+<td><a href="aes_256.txt">aes_256.txt</a></td>
+<td><a href="MAND/aes_256.txt">aes_256.txt</a></td>
+<td>8832</td>
+<td>39008</td>
+<td>2826</td>
+<td>84</td>
+</tr>
+<tr>
+<td>Keccak-f </td>
+<td><a href="Keccak_f.txt">Keccak_f.txt</a></td>
+<td><a href="MAND/Keccak_f.txt">Keccak_f.txt</a></td>
+<td>38400</td>
+<td>115200</td>
+<td>38486</td>
+<td>24</td>
+</tr>
+<tr>
+<td>SHA-256 </td>
+<td><a href="sha256.txt">sha256.txt</a></td>
+<td><a href="MAND/sha256.txt">sha256.txt</a></td>
+<td>22573</td>
+<td>110644</td>
+<td>1856</td>
+<td>1607</td>
+</tr>
+<tr>
+<td>SHA-512 </td>
+<td><a href="sha512.txt">sha512.txt</a></td>
+<td><a href="MAND/sha512.txt">sha512.txt</a></td>
+<td>57947</td>
+<td>286724</td>
+<td>4946</td>
+<td>3303</td>
+</tr>
+</table>
+</center>
+
+Note for AES-128 the wire orders are in the reverse order as used in the
+examples given in our earlier `Bristol Format', thus bit 0 becomes bit
+127 etc, for key, plaintext and message. 
+
+<p>
+For AES we created a design using the Boyar-Peralta S-Boxes,
+which have 32 AND gates per S-Box.
+
+<p>
+For SHA-256 and SHA-512 we give a circuit which maps an input buffer
+and an input chaining state to the next chaining state.
+
+<p>
+To get the nice gate counts for SHA-256 and SHA-512 we thank
+Steven Goldfeder who provided advice and help from his work
+in the paper:
+<ul>
+Zero-Knowledge Contingent Payments Revisited: Attacks and Payments for Services 
+Matteo Campanelli, Rosario Gennaro, Steven Goldfeder, Luca Nizzardo. 
+ACM Conference on Computer and Communications Security (CCS), 2017. 
+</ul>
+In particular he pointed out the 'correct' method for addition
+circuits which means an n-bit adder only uses n-1 AND gates.
+Whilst this addition method was well known to us turned out our 
+VHDL synthesis tools would spot we were doing an adder and then 
+substitute in the usual circuit used in real hardware (which uses more AND gates).
+Fixing this required some VHDL trickery from Danilo.
+Finally, the same trick was then factored into the improved 64-bit 
+arithmetic circuits above. 
+<p>
+The circuit for <i>udivide64</i> was provided by Steve Lu, who
+generated it using the EMP-Toolkit.
+
+<h3>IEEE Floating Point Operations</h3>
+We also provide some circuits for IEEE floating point
+operations.
+These operations deal with the IEEE rounding and
+NaN etc correctly.
+An 64-bit IEEE double is represented in the following
+format; in particular
+<ol>
+  <li> Bit 63 is the sign bit
+  <li> Bits 52-62 are the exponent, with 62 being the msb.
+  <li> Bits 0-51 are the mantissa, with 51 being the msb.
+</ol>
+<center>
+<table border="1">
+<tr>
+<td><b>Function</b></td>
+<td><b>Basic Circuit File</b></td>
+<td><b>Extended Circuit File</b></td>
+<td><b>No. ANDs</b></td>
+<td><b>No. XORs</b></td>
+<td><b>No. INVs</b></td>
+<td><b>Depth</b></td>
+</tr>
+<tr>
+<td>add</td>
+<td><a href="FP-add.txt">FP-add.txt</a></td>
+<td><a href="MAND/FP-add.txt">FP-add.txt</a></td>
+<td>5385</td>
+<td>8190</td>
+<td>2062</td>
+<td>235</td>
+</tr>
+<tr>
+<td>mul</td>
+<td><a href="FP-mul.txt">FP-mul.txt</a></td>
+<td><a href="MAND/FP-mul.txt">FP-mul.txt</a></td>
+<td>19626</td>
+<td>21947</td>
+<td>3326</td>
+<td>129</td>
+</tr>
+<tr>
+<td>div</td>
+<td><a href="FP-div.txt">FP-div.txt</a></td>
+<td><a href="MAND/FP-div.txt">FP-div.txt</a></td>
+<td>82269</td>
+<td>84151</td>
+<td>17587</td>
+<td>3619</td>
+</tr>
+<tr>
+<td>eq</td>
+<td><a href="FP-eq.txt">FP-eq.txt</a></td>
+<td><a href="MAND/FP-eq.txt">FP-eq.txt</a></td>
+<td>315</td>
+<td>65</td>
+<td>837</td>
+<td>9</td>
+</tr>
+<tr>
+<td>lt</td>
+<td><a href="FP-lt.txt">FP-lt.txt</a></td>
+<td><a href="MAND/FP-lt.txt">FP-lt.txt</a></td>
+<td>381</td>
+<td>257</td>
+<td>898</td>
+<td>67</td>
+</tr>
+<tr>
+<td>f2i</td>
+<td><a href="FP-f2i.txt">FP-f2i.txt</a></td>
+<td><a href="MAND/FP-f2i.txt">FP-f2i.txt</a></td>
+<td>1467</td>
+<td>1625</td>
+<td>840</td>
+<td>94</td>
+</tr>
+<tr>
+<td>i2f</td>
+<td><a href="FP-i2f.txt">FP-i2f.txt</a></td>
+<td><a href="MAND/FP-i2f.txt">FP-i2f.txt</a></td>
+<td>2416</td>
+<td>3605</td>
+<td>1115</td>
+<td>206</td>
+</tr>
+<tr>
+<td>sqrt</td>
+<td><a href="FP-sqrt.txt">FP-sqrt.txt</a></td>
+<td><a href="MAND/FP-sqrt.txt">FP-sqrt.txt</a></td>
+<td>91504</td>
+<td>100120</td>
+<td>19900</td>
+<td>6507</td>
+</tr>
+<tr>
+<td>floor</td>
+<td><a href="FP-floor.txt">FP-floor.txt</a></td>
+<td><a href="MAND/FP-floor.txt">FP-floor.txt</a></td>
+<td>651</td>
+<td>595</td>
+<td>367</td>
+<td>71</td>
+</tr>
+<tr>
+<td>ceil</td>
+<td><a href="FP-ceil.txt">FP-ceil.txt</a></td>
+<td><a href="MAND/FP-ceil.txt">FP-ceil.txt</a></td>
+<td>650</td>
+<td>597</td>
+<td>371</td>
+<td>71</td>
+</tr>
+</table>
+</center>
+Note the function f2i implements the 
+`round nearest-even' convention which is equivalent
+to the C++ code
+<pre>
+  double xx=....;
+  unsigned long zz;
+  zz=(long) nearbyint(xx);
+</pre> 
+With i2f doing the inverse operation, i.e. converting a
+64-bit integer into a double.
+
+
+<hr>
+
+Most of the circuits were mostly created using Synposis tools from VHDL source.
+The VHDL can be found in the release of SCALE-MAMBA if you
+are interested. The current circuits above were produced from
+the VHDL in SCALE-MAMBA version 1.7.
+After the associated NetList was produced we post-processed them into the
+format described above, for use within the SCALE-MAMBA engine. <p>
+
+The floating point circuits were created by using the 
+<a href="http://www.jhauser.us/arithmetic/SoftFloat.html">
+Berkeley SoftFloat</a> library (version 2),
+then the output was passed through
+<a href="https://gitlab.com/securityengineering/CBMC-GC-2">
+CBMC-GC</a> to produce Bristol Format files with no OR's.
+We then manually edited the result to produce Bristol Fashion
+files. <p>
+
+David Archer<br>
+Victor Arribas Abril<br>
+Steve Lu<br>
+Pieter Maene<br>
+Nele Mertens<br>
+Danilo Sijacic <br>
+Nigel Smart<br>
+
+</body>
+</html>

@@ -1,0 +1,223 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Template for creating scribe notes 
+%
+%  Fill in your name, lecture number, lecture date and body
+%  of scribe notes as indicated below.
+%
+%  Based on template used at Princeton University
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amssymb}
+\usepackage{amsthm}
+
+\setlength{\topmargin}{0pt}
+\setlength{\textheight}{9in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\oddsidemargin}{0.25in}
+\setlength{\textwidth}{6in}
+\pagestyle{plain}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+%%%% mark this version as a draft (remove for final revision) %%%%
+%\raisebox{0.6in}[0in]{\makebox[\textwidth][r]{\it
+ %DRAFT --- a final version will be posted shortly}}
+%\vspace{-0.7in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+\bf\large FHE-MPC Notes
+\end{center}
+
+\noindent
+Lecturer: Nigel Smart               %%% fill in lecturer
+\hfill
+Lecture \#8               %%% fill in lecture number here
+\\
+Scribe: Peter Scholl                 %%% fill in your name here
+\hfill
+28/11/11                         %%% fill in lecture date here
+
+\noindent
+\rule{\textwidth}{1pt}
+
+\medskip
+
+
+\newcommand{\mb}[1] {\mathbf{#1}}
+\newcommand{\Norm}[1]{\Vert #1 \Vert}
+\newcommand{\round}[1]{\lceil #1 \rfloor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% body of scribe notes goes here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In the previous lecture, it was shown how to perform secure multiparty
+computation using a multiplicative Linear Secret Sharing Scheme (LSSS). The
+resulting scheme had two main drawbacks:
+
+\begin{itemize}
+\item Perfect security only for \textit{semi-honest} adversaries.
+\item Required secure point-to-point communication between all players.
+\end{itemize}
+To allow active as opposed to semi-honest adversaries can be 
+dealt with via VSS, but this is inefficient and still does not 
+avoid the secure point-to-point communication issue.
+
+The requirement for secure channels stems from the algorithm for multiplying
+$x$ and $y$: each player had to compute the local product of shares $p_i = [x]_i[y]_i$
+and then securely distribute the shares of $p_i$ to all other players.
+To allow the use of publicly broadcasted channels, a new technique for
+multiplication is required. This was introduced by Beaver in 1992 \cite{Beaver1992}.
+
+Initially, it is required that a secret \textit{multiplication triple} is
+shared between all players. That is, the $i$-th player has the shares $[a]_i,
+[b]_i, [c]_i$, such that upon reconstruction, $a \cdot b = c$.
+Suppose we have already done this initial setup stage, and now want
+to compute the product of $x$ and $y$, where each player
+has the shares $[x]_i, [y]_i$. Firstly, every player computes and
+publicly broadcasts the values:
+
+\begin{align*}
+[d]_i &= [x]_i - [a]_i \\
+[e]_i &= [y]_i - [b]_i.
+\end{align*}
+Since $[a]_i$ and $[b]_i$ are only initially known to the $i$-th player, it
+follows that these values hide the corresponding shares of $x$ and $y$. We also
+have that when reconstructed, $d = x - a$ and $e = y - b$. Next, each player
+reconstructs the values of $d$ and $e$, and then computes
+\[[z]_i = de + d[b]_i + e[a]_i + [c]_i.\]
+This corresponds to a share of
+\begin{align*}
+z &= de + db + ea + c \\
+  &= (x-a)(y-b) + (x-a)b + (y-b)a + ab \\
+  &= xy
+\end{align*}
+%
+and so we have successfully shared the product of $x$ and $y$.
+
+
+\subsection*{Active adversaries}
+To achieve security against active adversaries, some kind of error correction
+is needed. 
+We need to be able to correct any errors introduced by the adversary in
+the broadcast of the shares of $e$ and $d$.
+In the case of information theoretic security this means that the
+underlying LSSS must support a $Q^3$ adversary structure, or
+equivalently can be extended to a scheme which is 
+strongly multiplicative.
+By a result of Cramer \textit{et al.} \cite{Cramer2000},
+these properties are essentially the same as the LSSS being
+derived from an error correcting code.
+In the case of threshold adversaries this equates to the treshold
+satisfying $t<n/3$.
+
+For the case of dishonest majority and computational adversaries
+a different technique is needed.
+We could use MACs to provide authentication of the communications. 
+Essentially, every piece
+of transmitted data is augmented with a MAC to ensure that nobody can cheat.
+
+
+
+
+\section*{Sharing a multiplication triple}
+
+\subsection*{Using a threshold LSSS}
+
+To generate a shared multiplication triple we can use pseudo-random secret
+sharing (PRSS), as introduced in the previous lecture.
+When using a Shamir secret sharing based scheme, the steps for each 
+player to carry out are as follows:
+
+\begin{itemize}
+\item Using PRSS, generate shares $[a]_i$, $[b]_i$, $[r]_i$, of pseudo-random
+numbers $[a]$, $[b]$ and $[r]$, which are represented by degree $t$ polynomials.
+
+\item Use \textit{pseudo-random zero sharing} (PRZS) to generate shares $[z_i]$ of $0$,
+represented by a degree $2t$ polynomial $z$.
+
+\item Compute $[s]_i = [a]_i [b]_i - [r]_i + [z]_i$, giving a degree $2t$ share
+of $ab - r$.
+
+\item Broadcast $[s]_i$, so every player knows $s = ab - r$.
+
+\item Compute the share $[c]_i = [s] + [r]_i$, giving a share of the product $[a]\cdot [b]$.
+
+\end{itemize}
+
+Note that, whilst the zero shares $[z]_i$ are not required for correctness, they
+are necessary to properly mask $s$. Although the random polynomial $r$ provides
+some masking, it is only of degree $t$ and so does not fully hide the degree
+$2t$ polynomial.
+
+In the case of semi-honest adversaries the above protocol will be correct.
+For the case of active adversaries in the information theoretic model
+we simply require that the honest players can detect when an error
+occurs (since then we just abort the offline phase and can start again).
+Since the broadcast of $[s]_i$ is of a $2t$ sharing we will be able
+to detect errors as long as the number of honest players is larger
+than $2t$; i.e. we require $n<t/3$.
+
+\subsection*{Using somewhat homomorphic encryption}
+
+We want to be able to perform multiparty computation when faced with a
+\textit{dishonest majority} of adversaries. Moreover, we want these adversaries
+to be \textit{active}.
+We need to be able to produce the triples, and the associated MACs
+mentioned above.
+To overcome these obstacles, we make use of a \textit{somewhat homomorphic encryption}
+scheme to compute the multiplication triples.
+This avoids the dependency on
+a strongly multiplicative LSSS, thus allowing security against a 
+dishonest majority (at the expensive of assuming a computational assumption).
+The steps for computing a multiplication triple using SHE are as follows
+(see \cite{Damgard}).
+
+\begin{itemize}
+\item Generate random shares $[a]_i$ and $[b]_i$ as before (for dishonest
+majority this is trivial).
+
+\item Broadcast the \textit{encryptions} under the SHE scheme of these shares,
+given by $\mathsf{Enc}([a]_i)$, $\mathsf{Enc}([b]_i)$.
+
+\item Each player homomorphically computes $\mathsf{Enc}(a) = \sum_i \mathsf{Enc}([a]_i)$,
+$\mathsf{Enc}(b) = \sum_i \mathsf{Enc}([b]_i)$ and $\mathsf{Enc}(c) = \mathsf{Enc}(a) \cdot \mathsf{Enc}(b)$.
+
+\item Perform a threshold decryption of $\mathsf{Enc}(c)$,
+so each player ends up with a share $[c]_i$ of the product $a\cdot b$.
+
+\end{itemize}
+How to add MACs to the above computation is explained in \cite{Damgard}.
+
+\bibliographystyle{plain}
+\begin{thebibliography}{1}
+
+\bibitem{Beaver1992}
+{\sc Beaver, D.}
+\newblock {Efficient multiparty protocols using circuit randomization}.
+\newblock {\em Advances in Cryptology - CRYPTO 1991\/} (1991).
+
+\bibitem{Cramer2000}
+{\sc Cramer, R.,
+\sc Damg\r{a}rd, I.,
+\sc Maurer, U.}
+\newblock {General secure multi-party computation from any linear secret-sharing scheme}.
+\newblock {\em Advances in Cryptology - EUROCRYPT 2000} (2000).
+
+\bibitem{Damgard}
+{\sc Damg\r{a}rd, I., Pastro, V., Smart, N., and Zakarias, S.}
+\newblock {Multiparty Computation from Somewhat Homomorphic Encryption}.
+\newblock {\em eprint.iacr.org\/} (2011).
+
+\end{thebibliography}
+
+\end{document}

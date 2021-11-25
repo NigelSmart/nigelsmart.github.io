@@ -1,0 +1,225 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Template for creating scribe notes 
+%
+%  Fill in your name, lecture number, lecture date and body
+%  of scribe notes as indicated below.
+%
+%  Based on template used at Princeton University
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath, amssymb}
+\usepackage{amsthm}
+
+\setlength{\topmargin}{0pt}
+\setlength{\textheight}{9in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\oddsidemargin}{0.25in}
+\setlength{\textwidth}{6in}
+\pagestyle{plain}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+%%%% mark this version as a draft (remove for final revision) %%%%
+%\raisebox{0.6in}[0in]{\makebox[\textwidth][r]{\it
+ %DRAFT --- a final version will be posted shortly}}
+%\vspace{-0.7in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+\bf\large FHE-MPC Notes
+\end{center}
+
+\noindent
+Lecturer: Nigel Smart               %%% fill in lecturer
+\hfill
+Lecture \#3               %%% fill in lecture number here
+\\
+Scribe: Peter Scholl                 %%% fill in your name here
+\hfill
+24/10/11                         %%% fill in lecture date here
+
+\noindent
+\rule{\textwidth}{1pt}
+
+\medskip
+
+
+\newcommand{\mb}[1] {\mathbf{#1}}
+\newcommand{\Norm}[1]{\Vert #1 \Vert}
+\newcommand{\round}[1]{\lceil #1 \rfloor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% body of scribe notes goes here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this lecture the LWE and ring-LWE problems were introduced, and it
+was described how these can be used to create cryptosystems based
+on lattice problems. Some possible parameter choices for ensuring the
+security of these schemes are discussed.
+
+\section{LWE problem}
+
+The \textit{learning with errors} (LWE) problem is to efficiently distinguish
+vectors created from a `noisy' set of linear equations between uniformly random
+vectors.
+Given a matrix
+$A \in \mathbb{Z}_q^{m \times n}$ and a vector $\mb{v} \in \mathbb{Z}_q^m$, the
+goal is to determine whether $\mb{v}$ has been sampled uniformly at random from
+$\mathbb{Z}_q^m$ or whether $\mb{v} = A\mb{s} + \mb{e}$ for some random $\mb{s} \in \mathbb{Z}_q^m$ and
+$\mb{e} \in \chi^m$, where $\chi$ is a small `noise' distribution over $\mathbb{Z}_q$.
+
+Observe that this is phrased as a decision problem. The \textit{search} version
+of LWE (to recover the vector $\mb{s}$, given polynomially many samples of
+the form $A\mb{s} + \mb{e}$) can be shown to be equivalent.
+
+The problem is very closely related to coding theory. If we choose the parameter
+$q = 2$, this becomes the well-studied \textit{learning parity with noise} (LPN)
+problem, which is believed to be hard. Recovering the key from the more general
+LWE problem is essentially
+equivalent to decoding a noisy linear code, also a long established difficult
+problem in coding theory. However, for modern cryptographic purposes it is more
+important to ensure indistinguishability of encryptions rather than just
+security against key recovery. For this purpose it helps to look at the
+problem from a lattice-based perspective.
+
+The vector
+$\mb{v} = A\mb{s} + \mb{e}$ can be seen as an element of the $q$-ary lattice $\Lambda_q(A^T)$
+with a small perturbation vector added. The task here is to distinguish this
+from a uniformly random vector.
+In 2005, Regev \cite{Regev2009} formalised this relationship by giving a reduction from
+worst-case lattice problems to LWE (for certain parameter choices):
+
+\vspace{5 mm}
+\noindent\textbf{Theorem:} If there exists an efficient algorithm that solves LWE then
+there exists an efficient algorithm that approximates the decision version of
+the shortest vector problem.
+\vspace{5 mm}
+
+Regev's original paper only gave a quantum reduction, but Peikert
+later made his algorithm classical at the expense of more restrictive parameter
+choices \cite{Peikert09}.
+
+For the above theorem to work, it is necessary that $\chi$ is chosen to be
+a discrete multivariate Gaussian distribution. This means that sampling from
+LWE involves taking a lattice point and perturbing it by a small, normally
+distributed quantity, the idea being that this will look close enough to a
+uniform distribution if the standard deviation is large enough.
+Sampling from this discrete Gaussian is simply accomplished by sampling each
+component from a normal distribution and rounding to the nearest integer.
+The standard deviation is chosen to be $\alpha q / \sqrt{2 \pi}$ for some
+$\alpha > 0$, and the mean is $0$.
+
+Note that in modern usage (e.g. the Brakerski/Vaikuntanathan homomorphic
+encryption schemes), it is required that the problem is hard when $\mb{s}$ is also
+sampled from the distribution $\chi$, rather than just uniformly. It may be useful
+for these schemes to instead choose $\mb{s}$ from $\{-1,0,1\}^n$, in order to
+simplify the bootstrapping procedure that can be needed. However, the security
+of the corresponding LWE problem in this setting has not been studied.
+
+\section{The LWE cryptosystem}
+
+Here we present the original public-key cryptosystem based on LWE, as described
+by Regev. The parameters are a modulus $q$, the dimensions $m$, $n$, an integer
+$l$ and the error distribution $\chi$.
+
+\noindent\textbf{Secret key:} Choose $S \in \mathbb{Z}_q^{n \times l}$ uniformly at
+random.
+
+\noindent\textbf{Public key:} Choose $A \in \mathbb{Z}_q^{m \times n}$, $E \in \chi^{m \times l}$.
+The public key is given by the pair $(A, P := AS + E)$.
+
+\noindent\textbf{Encryption}:
+To encrypt a message $m \in \mathbb{Z}_t^l$, first choose $a \in \{-r, \dots, r\}$.
+Then output the ciphertext
+\[ c = (A^Ta, P^Ta + \round{ m \frac{q}{t}}) \]
+
+\noindent\textbf{Decryption}: We first compute the value
+\begin{align*}
+\mb{d} &= c_1 - S^Tc_0 \\
+       &= P^T\mb{a} + \round{ \mb{m} \frac{q}{t} } - S^TA^T\mb{a} \\
+       &= E^T\mb{a} + \round{ \mb{m} \frac{q}{t} }.
+\end{align*}
+%
+Since $E$ is chosen from the relatively small
+noise distribution, we can recover the bits of $\mb{m}$ by simply rounding $\displaystyle\frac{t}{q}\mb{d}$ to the
+nearest integer.
+
+Under the LWE assumption, the public key and any ciphertexts are all indistinguishable from random,
+and so the scheme can be shown to be IND-CPA secure.
+
+
+\subsection{Choosing the parameters}
+To choose parameters for the scheme, it helps to think about the LWE problem
+in terms of lattices. That is, to determine whether a given point $\mb{v}$ is in the lattice
+$\Lambda_q(A^T)$ or is uniformly random. A possible approach for this problem
+is to find a short vector $\mb{w} \in \Lambda_q(A^T)^*$. If $\mb{v}$ is random then
+$\langle \mb{v}, \mb{w} \rangle$ will also be random, whereas if
+$\mb{v} = A\mb{s} + \mb{e}$ then $\langle \mb{v}, \mb{w} \rangle$ will be
+close to an integer. To thwart this attack, we only need to ensure that the
+noise added in the direction of $\mb{w}$ much bigger than $1/\mb{w}$.
+Since the standard deviation of this noise is given by $\displaystyle\frac{\alpha q}{\sqrt{2\pi}}$,
+Regev suggests that to ensure security it is sufficient that
+
+\[ \frac{\alpha q}{\sqrt{2\pi}} > 1.5 \frac{1}{\Norm{\mb{w}}}. \]
+%
+If the BKZ algorithm is used to find this short vector $\mb{w}$ then its length
+is predicted to be $\min\{1, \delta^m q^{n/m-1}\}$, where $\delta$ is the Hermite
+root factor discussed previously (generally taken to be 1.005 or 1.01).
+So this leads us to the constraint:
+
+\[ \frac{\alpha q}{\sqrt{2\pi}} > 1.5 \max\{1, \delta^{-m}q^{1 - n/m}\}. \]
+%
+Since an attacker has the capability to generate as many LWE instances as they
+wish (by simply encrypting messages), they effectively have complete freedom over the choice
+of the parameter $m$. This is therefore taken to be the optimal value for
+lattice-based attacks on LWE, which is given by $m = \sqrt{n \log{q}/\log{\delta}}$.
+
+\section{Ring LWE}
+
+The \textit{ring-LWE} problem is an algebraic variant of LWE, which operates
+over elements of polynomial rings instead of vectors. A polynomial $f(x) \in \mathbb{Z}[x]$
+is chosen, defining the ring $R = \mathbb{Z}[x]/f$. We then choose $a,s \in \mathbb{Z}[x]$
+uniformly at random and an integer modulus $q$. The problem is to distinguish
+between random elements of $\mathbb{Z}_q[x]$ and elements of the form
+$v = as + e \mod{q, f(x)}$, where $e$ is chosen from a small `error' distribution
+$\chi$.
+
+This is an instance of the standard LWE problem, since polynomials in the ring
+$R$ can be represented by matrices, with multiplication given by multiplication
+of a matrix and a vector, as in LWE. The security of this problem has been
+related to hardness problems on \textit{ideal} lattices, rather than ordinary
+lattices, and it is unknown whether these problems could be any easier than
+standard LWE. However, ring-LWE is still an attractive alternative, as its
+algebraice structure implies that operations can be far more efficient than
+those in LWE.
+
+\begin{thebibliography}{Reg09}
+
+\bibitem[Pei09]{Peikert09}
+Chris Peikert.
+\newblock {Public-Key Cryptosystems from the Worst-Case Shortest Vector
+  Problem}.
+\newblock In {\em Proceedings of the 41st annual ACM symposium on Theory of
+  computing}, pages 333--342. ACM, 2009.
+
+\bibitem[Reg05]{Regev2009}
+Oded Regev.
+\newblock {On lattices, learning with errors, random linear codes, and
+  cryptography}.
+\newblock In {\em Proceedings of the 37th annual ACM symposium on Theory of
+  Computing}, pages 84--93. ACM, 2005.
+
+\end{thebibliography}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

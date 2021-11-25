@@ -1,0 +1,168 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Template for creating scribe notes 
+%
+%  Fill in your name, lecture number, lecture date and body
+%  of scribe notes as indicated below.
+%
+%  Based on template used at Princeton University
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,url}
+
+
+\setlength{\topmargin}{0pt}
+\setlength{\textheight}{9in}
+\setlength{\headheight}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\oddsidemargin}{0.25in}
+\setlength{\textwidth}{6in}
+\pagestyle{plain}
+
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\bfa}{\mathbf{a}}
+\newcommand{\bfb}{\mathbf{b}}
+\newcommand{\bfc}{\mathbf{c}}
+\newcommand{\bfr}{\mathbf{r}}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+%%%% mark this version as a draft (remove for final revision) %%%%
+%\raisebox{0.6in}[0in]{\makebox[\textwidth][r]{\it
+% DRAFT --- a final version will be posted shortly}}
+%\vspace{-0.7in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+\bf\large FHE-MPC Notes
+\end{center}
+
+\noindent
+Lecturer: Nigel Smart               %%% fill in lecturer
+\hfill
+Lecture \#7               %%% fill in lecture number here
+\\
+Scribe: Joop van de Pol                 %%% fill in your name here
+\hfill
+21st November 2011                         %%% fill in lecture date here
+
+\noindent
+\rule{\textwidth}{1pt}
+
+\medskip
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% body of scribe notes goes here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Secret Sharing}
+\nocite{Scho09}
+Consider $n$ {\it participants} $P_1, P_2, \ldots, P_n$ who want to distribute a {\it secret} $s$ amongst themselves such that each participant $P_i$ has a {\it share} $[s]_i$ of the secret. It should be possible to reconstruct the secret when in possession of `enough' shares (i.e., the participants corresponding to these shares combined are {\it qualified} to access the secret) and impossible otherwise. This can be achieved by a {\it secret sharing scheme}, which consists of at least the following two protocols:
+\begin{itemize}
+ \item{The {\it distribution protocol}, where a sharer or {\it dealer} (who knows the secret $s$) creates and distributes the shares $[s]_i$ amongst the participants $P_i$.} 
+ \item{The {\it reconstruction protocol}, where a qualified set of participants recovers the secret by combining their shares.}
+\end{itemize}
+
+\subsection*{Shamir Secret Sharing}
+Consider the following secret sharing scheme, which is due to Shamir \cite{Sham79}:
+\begin{itemize}
+ \item{Distribution: The dealer picks a random polynomial $f \in \F_p[x]$ of degree $t < n$ such that $f(0) = s\in \F_p$. He computes the values $[s]_i := f(i)\bmod{p}$ for $1\leq i\leq n$ and sends each share $[s]_i$ to the corresponding participant $P_i$.}
+ \item{Reconstruction: Any $t+1$ participants can reconstruct the polynomial $f$ by applying Lagrange interpolation to the tuples $(i,[s]_i)$. They recover the secret by computing $f(0)\bmod{p} = s$.}
+\end{itemize}
+This scheme is correct because any $t+1$ pairs $(i,x_i)$ uniquely determine a polynomial $g$ of degree $t$ satisfying $g(i) = x_i$, thus interpolation on $t+1$ pairs $(i,f(i))$ must yield $f$. Since $s$ can be easily obtained from $f$, $f$ is sometimes denoted by $[s]$, the secret in its shared form. In this scheme, a set of participants is qualified (to reconstruct the secret) if it contains at least $t+1$ participants, regardless of which participants it contains. Such a scheme is called a $(t+1,n)$-threshold scheme, where $t+1$ is the threshold. 
+
+Furthermore, consider the case where an adversary has $t$ shares $(i,f(i))$. Adding the imaginary share $(0,s)$ shows that the only polynomial corresponding to these shares which will yield the secret is $f$. Thus, guessing a correct share $(i',f(i'))$ is equivalent to guessing $s$, which can be done with probability $1/p$. In fact, adding any pair $(0,r)$ for $r\in\F_p$ to the $t$ shares gives rise to a polynomial of degree $t$ with unique values for the remaining $n-t$ shares. Thus, all values $r\in\F_p$ are equally likely to be the secret. This means that the adversary cannot get any information about the secret $s$ when in possession of fewer than $t+1$ shares. Schemes which have this property (any unqualified set of participants do not gain any information about the secret) are called {\it perfect} secret sharing schemes.
+
+Another interesting property of this scheme is that the secret and the shares are all of the same `size', since they are all elements of $\F_p$. Consider the quantities
+  \begin{align*} 
+  \rho_i = \frac{\# \text{ of bits in } s}{ \# \text{ of bits in } [s]_i},
+  \end{align*}
+which consist of the ratio of bits in $s$ to the bits in share $[s]_i$. Now, the information rate of a scheme is defined by $\rho = \min_i \rho_i$. In the case that the `size' of the secret is the same as the size of each of the shares, the information rate $\rho = 1$. Secret sharing schemes that satisfy $\rho = 1$ are called ideal. Note that perfect secret sharing schemes satisfy $\rho \leq 1$.
+
+\subsection*{Relation to error-correcting codes}
+Shamir Secret Sharing is related to error-correcting codes. In error-correcting codes, a message of length $k$ is extended by $n-k$ `redundant' bits. The resulting $n$ bits are sent over a noisy channel, where the receiver might not correctly receive the value of all bits (although the order is unchanged). Then, the receiver uses the redundant information to repair the message. The original idea of Reed-Solomon codes was to oversample a polynomial of degree $k$ at $n > k+1$ points and to use interpolation techniques to repair the message afterwards (although this view is not used in practice anymore). This is identical to Shamir Secret Sharing, but rather than reconstructing the secret from only partial information, the secret (polynomial) is used to reconstruct rest of the shares. As a result, Shamir Secret Sharing can handle the input of `wrong' shares, as these correspond to wrongly transmitted bits in the error-correcting code setting. However, more shares are needed in this case, which leads to the condition $t < n/3$. 
+
+\subsection*{Access structures}
+It is also possible to construct general (non-threshold) secret sharing schemes. In this case there is a general {\it access structure} which consists of a pair of sets $(\Gamma,\Delta)$ such that $\Gamma,\Delta \subseteq 2^{[n]}$ and $\Gamma \cap \Delta = \emptyset$, where $[n]$ is the set of indices $\{1,\ldots,n\}$. An access structure is called complete if $\Gamma \cup \Delta = 2^{[n]}$. It is called monotone if for all sets $Q\in\Gamma$ all supersets of $Q$ are also in $\Gamma$ and likewise, for all sets $Q\in\Delta$ all subsets of $Q$ are also in $\Delta$. 
+
+In words, this means the following: let $P_1, \ldots, P_n$ be the participants. Then the set $\Gamma$ contains the `qualified sets', i.e., all sets of indices $A\subseteq[n]$ such that the participants $P_i$ for $i\in A$ are qualified to reconstruct the secret. Conversely, the set $\Delta$ contains all `non-qualified sets'. The access structure is called complete if every set of participants is either qualified or non-qualified. An access structure is monotone if adding participants to an already qualified set of participants will not disqualify it and conversely, removing participants from a non-qualified set will not make it qualified. Thus, an access structure describes which sets of participants can or cannot reconstruct the secret when working together. In the following, the access structures will always be monotone and complete.
+
+\subsection*{General construction}
+The following describes a construction, due to Brickell \cite{Bric90}, gives rise to so-called linear secret sharing schemes. Given an access structure $(\Gamma,\Delta)$, a (public) matrix $A\in\F_p^{k\times n}$ that satisfies the following relation needs to be constructed:
+  \begin{align*}
+  Q \in \Gamma \Leftrightarrow \bfb \in \{A_Q \bfc: \bfc \in \F_p^{|Q|}\},
+  \end{align*}
+where $\bfb$ is a vector in $\F_p^k$ and $A_Q$ is the $k\times |Q|$ matrix obtained by taking the columns of $A$ indexed by $Q$. This means that $Q$ is qualified if and only if $\bfb$ is in the linear span of the columns of $A_Q$. The scheme now consists of the following two phases:
+\begin{itemize}
+  \item{Distribution: The dealer takes a random column vector $\bfr \in \F_p^k$ such that $s = \bfr\cdot\bfb$. He now computes and distributes the shares $[s]_i := \bfr\cdot\bfa_i$, where $\bfa_i$ is the $i$'th column of $A$.}
+  \item{Reconstruction: A qualified set of participants $Q$ computes the $\bfc$ such that $A_Q\bfc = \bfb$. Denote by $[s]_Q$ the vector consisting of the shares of all participants indexed by $Q$. They then compute $[s]_Q\cdot \bfc = s$}
+\end{itemize}
+The correctness of this scheme follows from the fact that $[s]_Q = \bfr A_Q$ and
+  \begin{align*}
+  [s]_Q\cdot \bfc = (\bfr A_Q) \bfc = \bfr (A_Q \bfc) = \bfr \cdot \bfb = s.
+  \end{align*}
+
+Once again, non-qualified sets of participants cannot learn any information about the secret. Let $Q\in\Delta$ be a non-qualified set and consider the following linear system of equations:
+  \begin{align*}
+  [s]_i &= \bfr\cdot\bfa_i,\quad i\in Q\\
+  s &= \bfr\cdot\bfb,
+  \end{align*}
+which has $k+1$ unknowns ($s$ and $\bfr$). Since $Q$ is non-qualified, this means that by construction, $\bfb$ is linearly independent from the columns of $A_Q$. Therefore, this system has rank $d + 1$, where $d$ is the rank of $A_Q$. Thus, there are $k+1$ unknowns and $d+1$ equations. This implies that there exactly $p^{k-d-1}$ solutions for every possible value of $s$, making them all equally likely. Thus, the scheme is perfect. 
+
+Consider the following example in $\F_2$:
+  \begin{align*}
+  A = \left(\begin{array}{cccc} 1 & 0 & 0 & 1 \\ 1 & 1 & 0 & 1 \\ 0 & 0 & 1 & 1 \end{array}\right)\quad \bfb = \left(\begin{array}{c} 1 \\ 0 \\ 0 \end{array}\right)
+  \end{align*}
+Now, $\bfa_1 + \bfa_2 = \bfb$ and $\bfa_2 + \bfa_3 + \bfa_4 = \bfb$. Thus, $\Gamma = \{\{1,2\},\{1,2,3\},\{1,2,3,4\},\{2,3,4\}\}$ and $\Delta = \{\{1\},\{1,3\},\{1,3,4\},\{1,4\},\{2\},\{2,3\},\{2,4\},\{3\},\{3,4\},\{4\}\}$. Let the secret be $s = 1$, and let the corresponding vector be $\bfr = (1, 0, 1)$. The shares are given by $[s]_1 = [s]_3 = 1$ and $[s]_2 = [s]_4 = 0$. Now participants $P_2,P_3$ and $P_4$ pool their shares to reconstruct the secret. The corresponding $\bfc = (1, 1, 1)$, so they compute $[s]_{\{1,2,3\}}\cdot \bfc = (0,1,0)\cdot(1,1,1) = 1 = s$.
+
+\subsection*{Pseudorandom Secret Sharing}
+One application of Shamir Secret Sharing is Pseudorandom Secret Sharing, due to Cramer, Damg{\aa}rd and Ishai \cite{CraDamIsh05}. The goal is to use initially distributed randomness to construct a virtually unlimited supply of Shamir secret sharings of pseudorandom values without further interaction. Let $\psi_k$ be a keyed pseudorandom function that outputs an element of $\F_p$, where $k$ is the key and let $a$ be some common input that all participants agree on. Consider a maximal non-qualified set $B\in\Delta$, i.e., $|B| = t$ when doing Shamir Secret Sharing. Let $A$ be the complement of $B$, which means that $|A| = n-t$. Now define a $t$-degree polynomial $f_A$ such that
+  \begin{align*}
+  f_A(x) = \left\{\begin{array}{cc}
+                  f(0) = 1& \\
+                  f(i) = 0 & \forall i \in B
+                 \end{array}\right.
+  \end{align*}
+As this definition fixes $t+1$ points, it uniquely determines the polynomial $f_A$ of degree $t$. Now, the dealer distributes a random value $r_A$ to all participants in $A$. This needs to be done independently for every set $A$ that is the complement of a maximal non-qualified set $B$, i.e., for all sets $A$ of size $n-t$ when doing Shamir Secret Sharing. Consider the polynomial $f$ defined as
+  \begin{align*}
+  f(x) = \sum_{A \subset [n] : |A| = n-t} \psi_{r_A}(a)f_A(x),
+  \end{align*}
+and take $s = f(0) = \sum \psi_{r_A}(a)$. Now, the value $s$ is supposed to be pseudorandom, as the values $r_A$ are all random and $\psi$ is a pseudorandom function. Furthermore, $f$ is the sum of $t$-degree polynomials, and thus the degree of $f$ is $t$. The polynomial $f$ is now shared amongst the participants as follows:
+Each player computes his own share as 
+  \begin{align*}
+  [s]_j = \sum_{A \subset [n] : |A| = n-t, j\in A} \psi_{r_A}(a) f_A(j) = f(j),
+  \end{align*}
+without knowing the actual polynomial $f$. The last equality holds because $f_A(j) = 0$ for all $A$ such that $j\not\in A$. The polynomial $f$ can be reconstructed from the shares $[s]_j$ using interpolation as before. While this description focuses on Shamir Secret Sharing, it is possible to extend this procedure to linear schemes for general (non-threshold) access structures.
+
+\subsection*{Homomorphic Secret Sharing}
+As with encryption, it is possible for secret sharing schemes to have homomorphic properties, i.e., for operations on the secret (plaintext), there are corresponding operations on the shares (ciphertext) that preserve the relation between secret and shares. 
+
+Consider the Shamir scheme once more. Let $s$ and $t$ be two secrets with polynomials $f$ and $g$, respectively. Now consider the sum of the two secrets, $s + t$. Since $s + t = f(0) + g(0) = (f+g)(0)$, the $t$-degree polynomial $f+g$ is a good candidate for the shared secret $[s+t]$. Conversely, adding the shares $[s]_i$ and $[t]_i$ gives $[s]_i + [t]_i = f(i) + g(i) = (f+g)(i)$, which correspond to the $i$'th share of $[s+t]$. Thus $[s]_i + [t]_i = [s+t]_i$, which provides the required corresponding operation on the shares. 
+
+By the above, the additive homomorphic property of Shamir's scheme is ``free'' in the sense that everything can be can be computed locally, but what about multiplication? Attempting the same gives $s * t = f(0)*g(0) = (f*g)(0)$ and $[s]_i * [t]_i = f(i)*g(i) = (f*g)(i) = [s*t]_i$. However, the polynomial $f*g$ is of degree $2t$ rather than $t$, which means that $2t+1$ shares are needed for interpolation of $f*g$. However, needing $2t+1$ shares to reconstruct the secret seems cumbersome. It turns out that it is possible using $t$ shares, as will be shown for general linear secret sharing schemes in the following.
+
+Consider linear secret sharing schemes for a general access structure. Cramer, D{\aa}mgard and Maurer \cite{CraDamMau00} showed that it is possible that, under certain restrictions on the access structure, such schemes can also be made multiplicative.  As with Shamir's scheme, the addition follows from the linear properties of the scheme and can be done locally. However, the multiplication needs some extra work. 
+
+A Linear Secret Sharing Scheme is called multiplicative if for all secrets $x$ and $y$, there exists a ``recombination'' vector $\bfr = (r_1,\ldots,r_n)$ of length $n$ such that $x*y = \sum_i r_i*[x]_i * [y]_i$, where $*$ signifies the Schur product if the shares consist of vectors. An access structure (or rather, its {\it adversary structure}) is called $Q_2$ if there are no non-qualified sets $S_1,S_2 \in \Delta$ such that $S_1 \cup S_2 = [n]$. Note that, for threshold schemes such as Shamir's scheme, this is equivalent to $2t < n$. The result of Cramer, D{\aa}mgard and Maurer states that any linear secret sharing scheme for an adversary structure that is $Q_2$ can be made multiplicative (and secure against passive attackers).
+
+Multiplication is performed as follows in a multiplication linear secret sharing scheme. Consider the participants $P_1,\ldots,P_n$, where participant $P_i$ has shares $[s]_i$ for secret $s$ and $[t]_i$ for secret $t$. Now, to get the shares for $[s*t]$, each participant needs to compute $[s]_i * [t]_i = \tilde{c}_i$. Then, the participant $P_i$ secret-shares his computed value $\tilde{c}_i$, resulting in shares $[\tilde{c}_i]_j$ for $1\leq j\leq n$. Participant $P_j$ now computes shares $[s*t]_j = \sum_{i=1}^n r_i [\tilde{c}_i]_j$ for $[s*t]$, where the vector $\bfr = (r_1,\ldots,r_n)$ is the recombination vector that follows from the multiplicative property of the scheme. 
+
+\begin{thebibliography}{99}
+\bibitem{Bric90} E. Brickell, Some ideal secret sharing schemes, In {\it Advances in Cryptology--EUROCRYPT '98}, pages 468--475. Springer, 1990.
+
+\bibitem{CraDamIsh05} R. Cramer, I. Damg{\aa} and Y. Ishai. Share conversion, pseudorandom secret-sharing and applications to secure computation. {\it Theory of Cryptography}, pages 342--362, 2005.
+
+\bibitem{CraDamMau00} R. Cramer, I. Damg{\aa}rd and U. Maurer. General secure multi-party computation from any linear secret-sharing scheme. In {\it Advances in Cryptology--EUROCRYPT '00}, pages 316--334. Springer, 2000.
+
+\bibitem{Scho09} B. Schoenmakers, Secret Sharing. 2009. Slides available at \url{http://www.win.tue.nl/~berry/2WC11/}.
+
+\bibitem{Sham79} A. Shamir. How to share a secret. {\it Communications of the ACM}, 22(11):612--613, 1979.
+\end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

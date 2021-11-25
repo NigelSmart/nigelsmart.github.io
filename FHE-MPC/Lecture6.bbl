@@ -1,0 +1,34 @@
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{1}
+
+\bibitem{Lindell2007}
+Y.~Lindell and B.~Pinkas, \emph{{An efficient protocol for secure two-party
+  computation in the presence of malicious adversaries}}, Advances in
+  Cryptology-EUROCRYPT 2007 (2007), no.~860, 52--78.
+
+\bibitem{Lindell2008}
+Y.~Lindell, B.~Pinkas, and N.~Smart, \emph{{Implementing two-party computation
+  efficiently with security against malicious adversaries}}, Security and
+  Cryptography for Networks (2008), no.~781, 2--20.
+
+\bibitem{Malkhi2004}
+D.~Malkhi, N.~Nisan, B.~Pinkas, and Y.~Sella, \emph{{Fairplay — A Secure
+  Two-Party Computation System}}, Proceedings of the 13th conference on USENIX
+  Security Symposium-Volume 13, USENIX Association, 2004, pp.~20--20.
+
+\bibitem{Pinkas2009}
+B.~Pinkas, T.~Schneider, N.~Smart, and S.~Williams, \emph{{Secure two-party
+  computation is practical}}, Advances in Cryptology–ASIACRYPT 2009 (2009),
+  250--267.
+
+\bibitem{Yao1982}
+A.~Yao, \emph{{Protocols for secure computations}}, Proceedings of FOCS (1982),
+  160--164.
+
+\end{thebibliography}
