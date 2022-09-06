@@ -17,6 +17,9 @@ than pretty.
 Page 63
  Line 8 "q_{k-1}=p_k-a_0 p_k" should read "q_{k-1}=p_k-a_0 q_k". 
  Line 11 should read " = p_k(p_k - a_0 q_k) - q_k(N q_k - a_0 p_k)".
+
+Page 70
+ Theorem V.10 statement. {\sigma_{i_0}} should be {\sigma_{i_0}}^2
   
 Page 194
  Line -14. Remove "$\le \mu_r \alpha T^2$".
@@ -49,4 +52,4 @@ Page 239
 
 
 
-Thanks to H. Cohen, M. Joye, M. Kida and B.M.M. de Weger.
+Thanks to H. Cohen, A. Gherga, M. Joye, M. Kida and B.M.M. de Weger.
