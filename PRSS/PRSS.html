@@ -1,0 +1,305 @@
+<html>
+<body>
+<h1>Efficient Degree (t,2t) Double Sharing Construction from PRSS</h1>
+Take an exceptional set in the underlying ring R, of size n+1, 
+<ul>
+   {alpha<sub>0</sub>,...,alpha<sub>n</sub>}.
+</ul>
+This needs the Lenstra constant of the ring to be greater than or equal to n+1.
+
+<p>
+For a subset A &sube; {1,...,n} of size n-t form the polynomial F<sub>A</sub>(X)
+of degree t such that
+<ul>
+        <li>F<sub>A</sub>(alpha<sub>0</sub>)=1.
+        <li>F<sub>A</sub>(alpha<sub>i</sub>)=0 for i &notin; A.
+</ul>
+
+Take PRF with codomain R and domain given by 
+<ul>
+        &#8469; x &#8469; x {0,1}<sup>&kappa;</sup>
+</ul>
+To each A &sube; {1,...,n} of size n-t associate a key k<sub>A</sub> &in; {0,1}<sup>&kappa;</sup> and give k<sub>A</sub> to all parties in A.
+
+<p>Let S be a set of sets, each element A of S is a subset of {1,...,n} of size n-t.
+The set S needs to be rather special for the following to work. 
+Below we give a table of the best (smallest) known sets for various parameters n and t.
+
+<p> Let <tt>cnt</tt> denote a counter.
+
+<p>
+To generate the <tt>cnt</tt><sup>th</sup> double sharing of degree (t,2t) of a random value <tt>r</tt>
+we compute the shares as
+<ul>
+        (&lt; r &gt;<sub>t</sub>)<sub>i</sub>
+        = &sum;<sub>A &in; S: i &in; A</sub> 
+              PRF(<tt>cnt</tt>, 0, k<sub>A</sub>) 
+            &times; 
+              F<sub>A</sub>(i),
+</ul>
+<ul>
+        (&lt; r &gt;<sub>2t</sub>)<sub>i</sub>
+        =  (&lt; r &gt;<sub>t</sub>)<sub>i</sub>
+            + &sum;<sub>A &in; S: i &in; A</sub> 
+              (
+              &sum;<sub>j &in; {1,...,t}</sub>
+                PRF(<tt>cnt</tt>, j , k<sub>A</sub>) 
+                &times; 
+                i<sup>j</sup> style="border:1px solid black;margin-left:auto;margin-right:auto;"
+                &times; 
+                F<sub>A</sub>(i)
+              ).
+</ul>
+The value being shared is equal to
+<ul>
+        r = &sum;<sub>A &in; S</sub> PRF(<tt>cnt</tt>, 0, k<sub>A</sub>) .
+</ul>
+
+<p>
+The traditional construction (CDI05) for the set S is to take <b>all</b> subsets of size n-t.
+
+<p>
+Thus the size of S in this traditional construction is binom(n,t), i.e. the size of the
+associated binomial coefficient.
+
+<p>
+However smaller sets S can be found which render the above PRSS construction of doubly-shared
+values secure.
+
+<p>
+For each entry in the table we give the size of S according to the traditional construction of
+CDI05, as well as the best set S we could find. 
+<ul>
+        <li>Clicking on this second entry will give you the actual set S you could use.</li>
+</ul>
+
+
+<style>
+table, th, td {
+	border: 1px solid black; 
+	border - collapse: collapse; 
+}
+th, td {
+	padding: 15px;
+}
+</style>
+<table style=border:1px solid black; margin - left:auto; margin - right:auto; >
+<tr bgcolor = cyan>
+	<th>n \ t</th>
+	<th>1</th>
+	<th>2</th>
+	<th>3</th>
+	<th>4</th>
+	<th>5</th>
+	<th>6</th>
+	<th>7</th>
+	<th>8</th>
+</tr>
+<tr>
+	<th bgcolor=cyan>3</th>
+	<td>3 , <a href="PRSS-Sets-3-1.txt">3</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>4</th>
+	<td>4 , <a href="PRSS-Sets-4-1.txt">5</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>5</th>
+	<td>5 , <a href="PRSS-Sets-5-1.txt">6</a></td>
+	<td>10 , <a href="PRSS-Sets-5-2.txt">9</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>6</th>
+	<td>6 , <a href="PRSS-Sets-6-1.txt">6</a></td>
+	<td>15 , <a href="PRSS-Sets-6-2.txt">12</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>7</th>
+	<td>7 , <a href="PRSS-Sets-7-1.txt">8</a></td>
+	<td>21 , <a href="PRSS-Sets-7-2.txt">18</a></td>
+	<td>35 , <a href="PRSS-Sets-7-3.txt">23</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>8</th>
+	<td>8 , <a href="PRSS-Sets-8-1.txt">9</a></td>
+	<td>28 , <a href="PRSS-Sets-8-2.txt">24</a></td>
+	<td>56 , <a href="PRSS-Sets-8-3.txt">40</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>9</th>
+	<td>9 , <a href="PRSS-Sets-9-1.txt">9</a></td>
+	<td>36 , <a href="PRSS-Sets-9-2.txt">31</a></td>
+	<td>84 , <a href="PRSS-Sets-9-3.txt">60</a></td>
+	<td>126 , <a href="PRSS-Sets-9-4.txt">72</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>10</th>
+	<td>10 , <a href="PRSS-Sets-10-1.txt">11</a></td>
+	<td>45 , <a href="PRSS-Sets-10-2.txt">36</a></td>
+	<td>120 , <a href="PRSS-Sets-10-3.txt">82</a></td>
+	<td>210 , <a href="PRSS-Sets-10-4.txt">120</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>11</th>
+	<td>11 , <a href="PRSS-Sets-11-1.txt">12</a></td>
+	<td>55 , <a href="PRSS-Sets-11-2.txt">44</a></td>
+	<td>165 , <a href="PRSS-Sets-11-3.txt">100</a></td>
+	<td>330 , <a href="PRSS-Sets-11-4.txt">186</a></td>
+	<td>462 , <a href="PRSS-Sets-11-5.txt">238</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>12</th>
+	<td>12 , <a href="PRSS-Sets-12-1.txt">12</a></td>
+	<td>66 , <a href="PRSS-Sets-12-2.txt">48</a></td>
+	<td>220 , <a href="PRSS-Sets-12-3.txt">144</a></td>
+	<td>495 , <a href="PRSS-Sets-12-4.txt">246</a></td>
+	<td>792 , <a href="PRSS-Sets-12-5.txt">385</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>13</th>
+	<td>13 , <a href="PRSS-Sets-13-1.txt">14</a></td>
+	<td>78 , <a href="PRSS-Sets-13-2.txt">52</a></td>
+	<td>286 , <a href="PRSS-Sets-13-3.txt">170</a></td>
+	<td>715 , <a href="PRSS-Sets-13-4.txt">387</a></td>
+	<td>1287 , <a href="PRSS-Sets-13-5.txt">546</a></td>
+	<td>1716 , <a href="PRSS-Sets-13-6.txt">743</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>14</th>
+	<td>14 , <a href="PRSS-Sets-14-1.txt">15</a></td>
+	<td>91 , <a href="PRSS-Sets-14-2.txt">70</a></td>
+	<td>364 , <a href="PRSS-Sets-14-3.txt">206</a></td>
+	<td>1001 , <a href="PRSS-Sets-14-4.txt">480</a></td>
+	<td>2002 , <a href="PRSS-Sets-14-5.txt">920</a></td>
+	<td>3003 , <a href="PRSS-Sets-14-6.txt">1195</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>15</th>
+	<td>15 , <a href="PRSS-Sets-15-1.txt">15</a></td>
+	<td>105 , <a href="PRSS-Sets-15-2.txt">76</a></td>
+	<td>455 , <a href="PRSS-Sets-15-3.txt">275</a></td>
+	<td>1365 , <a href="PRSS-Sets-15-4.txt">689</a></td>
+	<td>3003 , <a href="PRSS-Sets-15-5.txt">1312</a></td>
+	<td>5005 , <a href="PRSS-Sets-15-6.txt">2117</a></td>
+	<td>6435 , <a href="PRSS-Sets-15-7.txt">2316</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>16</th>
+	<td>16 , <a href="PRSS-Sets-16-1.txt">17</a></td>
+	<td>120 , <a href="PRSS-Sets-16-2.txt">80</a></td>
+	<td>560 , <a href="PRSS-Sets-16-3.txt">320</a></td>
+	<td>1820 , <a href="PRSS-Sets-16-4.txt">848</a></td>
+	<td>4368 , <a href="PRSS-Sets-16-5.txt">1885</a></td>
+	<td>8008 , <a href="PRSS-Sets-16-6.txt">3048</a></td>
+	<td>11440 , <a href="PRSS-Sets-16-7.txt">4340</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>17</th>
+	<td>17 , <a href="PRSS-Sets-17-1.txt">18</a></td>
+	<td>136 , <a href="PRSS-Sets-17-2.txt">104</a></td>
+	<td>680 , <a href="PRSS-Sets-17-3.txt">340</a></td>
+	<td>2380 , <a href="PRSS-Sets-17-4.txt">1108</a></td>
+	<td>6188 , <a href="PRSS-Sets-17-5.txt">2778</a></td>
+	<td>12376 , <a href="PRSS-Sets-17-6.txt">4658</a></td>
+	<td>19448 , <a href="PRSS-Sets-17-7.txt">6925</a></td>
+	<td>24310 , <a href="PRSS-Sets-17-8.txt">8458</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>18</th>
+	<td>18 , <a href="PRSS-Sets-18-1.txt">18</a></td>
+	<td>153 , <a href="PRSS-Sets-18-2.txt">108</a></td>
+	<td>816 , <a href="PRSS-Sets-18-3.txt">461</a></td>
+	<td>3060 , <a href="PRSS-Sets-18-4.txt">1368</a></td>
+	<td>8568 , <a href="PRSS-Sets-18-5.txt">3676</a></td>
+	<td>18564 , <a href="PRSS-Sets-18-6.txt">7312</a></td>
+	<td>31824 , <a href="PRSS-Sets-18-7.txt">10578</a></td>
+	<td>43758 , <a href="PRSS-Sets-18-8.txt">14171</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>19</th>
+	<td>19 , <a href="PRSS-Sets-19-1.txt">20</a></td>
+	<td>171 , <a href="PRSS-Sets-19-2.txt">124</a></td>
+	<td>969 , <a href="PRSS-Sets-19-3.txt">532</a></td>
+	<td>3876 , <a href="PRSS-Sets-19-4.txt">1843</a></td>
+	<td>11628 , <a href="PRSS-Sets-19-5.txt">4816</a></td>
+	<td>27132 , <a href="PRSS-Sets-19-6.txt">10468</a></td>
+	<td>50388 , <a href="PRSS-Sets-19-7.txt">18632</a></td>
+	<td>75582 , <a href="PRSS-Sets-19-8.txt">22858</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>20</th>
+	<td>20 , <a href="PRSS-Sets-20-1.txt">21</a></td>
+	<td>190 , <a href="PRSS-Sets-20-2.txt">140</a></td>
+	<td>1140 , <a href="PRSS-Sets-20-3.txt">665</a></td>
+	<td>4845 , <a href="PRSS-Sets-20-4.txt">2292</a></td>
+	<td>15504 , <a href="PRSS-Sets-20-5.txt">6590</a></td>
+	<td>38760 , <a href="PRSS-Sets-20-6.txt">15186</a></td>
+	<td>77520 , <a href="PRSS-Sets-20-7.txt">28145</a></td>
+	<td>125970 , <a href="PRSS-Sets-20-8.txt">40310</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>21</th>
+	<td>21 , <a href="PRSS-Sets-21-1.txt">21</a></td>
+	<td>210 , <a href="PRSS-Sets-21-2.txt">148</a></td>
+	<td>1330 , <a href="PRSS-Sets-21-3.txt">751</a></td>
+	<td>5985 , <a href="PRSS-Sets-21-4.txt">2805</a></td>
+	<td>20349 , <a href="PRSS-Sets-21-5.txt">8570</a></td>
+	<td>54264 , <a href="PRSS-Sets-21-6.txt">21479</a></td>
+	<td>116280 , <a href="PRSS-Sets-21-7.txt">44384</a></td>
+	<td>203490 , <a href="PRSS-Sets-21-8.txt">69202</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>22</th>
+	<td>22 , <a href="PRSS-Sets-22-1.txt">23</a></td>
+	<td>231 , <a href="PRSS-Sets-22-2.txt">156</a></td>
+	<td>1540 , <a href="PRSS-Sets-22-3.txt">859</a></td>
+	<td>7315 , <a href="PRSS-Sets-22-4.txt">3460</a></td>
+	<td>26334 , <a href="PRSS-Sets-22-5.txt">9933</a></td>
+	<td>74613 , <a href="PRSS-Sets-22-6.txt">28629</a></td>
+	<td>170544 , <a href="PRSS-Sets-22-7.txt">65247</a></td>
+	<td>319770 , <a href="PRSS-Sets-22-8.txt">113861</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>23</th>
+	<td>23 , <a href="PRSS-Sets-23-1.txt">24</a></td>
+	<td>253 , <a href="PRSS-Sets-23-2.txt">184</a></td>
+	<td>1771 , <a href="PRSS-Sets-23-3.txt">935</a></td>
+	<td>8855 , <a href="PRSS-Sets-23-4.txt">4138</a></td>
+	<td>33649 , <a href="PRSS-Sets-23-5.txt">13507</a></td>
+	<td>100947 , <a href="PRSS-Sets-23-6.txt">32637</a></td>
+	<td>245157 , <a href="PRSS-Sets-23-7.txt">93630</a></td>
+	<td>490314 , <a href="PRSS-Sets-23-8.txt">178239</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>24</th>
+	<td>24 , <a href="PRSS-Sets-24-1.txt">24</a></td>
+	<td>276 , <a href="PRSS-Sets-24-2.txt">192</a></td>
+	<td>2024 , <a href="PRSS-Sets-24-3.txt">1155</a></td>
+	<td>10626 , <a href="PRSS-Sets-24-4.txt">4704</a></td>
+	<td>42504 , <a href="PRSS-Sets-24-5.txt">17173</a></td>
+	<td>134596 , <a href="PRSS-Sets-24-6.txt">47467</a></td>
+	<td>346104 , <a href="PRSS-Sets-24-7.txt">97911</a></td>
+	<td>735471 , <a href="PRSS-Sets-24-8.txt">271581</a></td>
+</tr>
+<tr>
+	<th bgcolor=cyan>25</th>
+	<td>25 , <a href="PRSS-Sets-25-1.txt">26</a></td>
+	<td>300 , <a href="PRSS-Sets-25-2.txt">200</a></td>
+	<td>2300 , <a href="PRSS-Sets-25-3.txt">1280</a></td>
+	<td>12650 , <a href="PRSS-Sets-25-4.txt">5715</a></td>
+	<td>53130 , <a href="PRSS-Sets-25-5.txt">20280</a></td>
+	<td>177100 , <a href="PRSS-Sets-25-6.txt">66718</a></td>
+	<td>480700 , <a href="PRSS-Sets-25-7.txt">150626</a></td>
+	<td>1081575 , <a href="PRSS-Sets-25-8.txt">383295</a></td>
+</tr>
+</table>
+
+<hr>
+Page constructed by:
+<ul>
+        <li>Emmanuela Orsini</li>
+        <li>Nigel P. Smart</li>
+</ul>
+
+</body>
+</html>
