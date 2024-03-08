@@ -108,6 +108,13 @@ So the box should probably be
 </center>
 <li>Page 296: Line -3. <br>
 Should be "breaking the RSA cryptosystem is no easier than solving the RSA problem."
+<li>Page 304: Section 15.3.4. <br>
+The moduli used in the example give Euler phi values which are all divisible by three, 
+which is not compatible with encryption exponent three. Thus make the following changes:
+<ol>
+	<li>The moduli N_1, N_2 and N_3 should be 253, 213 and 901 respectively.
+	<li>The ciphertexts c_1, c_2 and c_3 should be 199, 7 and 730 respectively.
+</ol>
 <li>Page 315: Line 2 and 3. <br>
 Should be "If b=b'" then algorithm B returns that
 j is not a quadrative residue, otherwise it returns that
@@ -182,6 +189,7 @@ and recovers..."
 </ol>
 
 Thanks to
+Felix Balado,
 Joan Boyar,
 Robin Geelen,
 Jochem Hoes,
