@@ -38,6 +38,12 @@ offer advanced functionalities such as Fully Homomorphic Encryption
 In this note I try to work out what the implications of this
 work are.
 
+<p>
+Updates to this post are at the bottom
+<ul>
+	<li><a href="#April16">Update on April 16th </a>
+</ul>
+
 <h4>Caveats</h4>
 The following should be read with a number of caveats in the
 back of ones mind. 
@@ -80,7 +86,7 @@ One can think of this $c$ as say $10$ in what follows.
 
 <p>
 
-The LWE problem is defined by a secret vector $\mathbf{s} \in \mathbb{Z_q}^n$
+The LWE problem is defined by a secret vector $\mathbf{s} \in \mathbb{Z}_q^n$
 and a secret vector $\mathbf{e} \in D^m$, i.e. we select $\mathbf{e}$
 from the product of $m$ copies of the distribution $D$.
 Thus $\mathbf{e}$ contains $m$ "small" values.
@@ -88,7 +94,7 @@ Thus $\mathbf{e}$ contains $m$ "small" values.
 <p>
 
 Then a public matrix $A$ of dimension $m \times n$ is selected
-with entries selected in $\mathbb{Z_q}$, and the value
+with entries selected in $\mathbb{Z}_q$, and the value
 $$\mathbf{y} = A \cdot \mathbf{s} + \mathbf{e} \pmod{q} $$
 is computed.
 
@@ -125,6 +131,7 @@ solution, one requires $m \ge n$ here in order to fix
 $\mathbf{s}$.
 This means we require the number of samples
 to be $m \ge \Omega(n \cdot \log q)$.
+<em>See <a href="#April16Vadim">update from April 16th</a> below for a note on this</em>
 
 <p>
 
@@ -419,7 +426,7 @@ on the value of $m$.
 <ol>I suspect the dependence on $m$ is quite mild, as it 
 	probably related to the repetition of the quantum
 	sub-routine and not the complexity of the sub-routine
-	itself. But that is a pure guess on my part.
+	itself. But that is a pure guess on my part at this point.
 </ol>
 
 <p>
@@ -459,6 +466,152 @@ yet being peer reviewed, or a quantum computer not yet being built.
 Nigel Smart<br>
 April 15th 2024.
 
+
+<a name="April16"></a>
+<h1>Update April 16th</h1>
+I give two updates 
+<ol>
+	<li><a href="#April16Paper">One from reading the paper</a>
+	<li><a href="#April16Vadim">One from discussion with Vadim Lyubashevksy</a>
+</ol>
+
+<a name="April16Paper"></a>
+<h2>Update From Reading the Paper</h2>
+Today I had a more detailed look at Section 3 of the paper where
+the parameters of the attack are given in more detail.
+
+<p>
+
+<h4>Section 3.1</h4>
+This section maps the input LWE problem (now the LWE dimension
+is referred to as $\ell$ instead of $n$ and the author
+sets $\beta=\alpha \cdot q$ to make things easier to parse)
+with uniform secret into a problem with a secret chosen
+from the error distribution, but with $\kappa$ values
+chosen to be of the attackers choice.
+
+<p>
+Basically there is a map between the input problem
+$$ \mathsf{LWE}_{\ell-(\kappa-1),m+\ell-(\kappa-1),q,U(\mathbb{Z}_q),\chi} $$
+for error distribution $\chi$ with parameter $\beta$, to
+the problem
+$$ \mathsf{LWE}^{\kappa-1 \mathsf{\ chosen\ secret}}_{\ell,m,q,\chi,\chi}. $$
+
+<h4>Section 3.2</h4>
+Then odd coprime values $p_1,\ldots,p_\kappa$ are picked so that
+$$ p_2,\ldots,p_\kappa \le \frac{\log n}{p_1}, $$
+where $n = 1+\ell+m$.
+It would appear for the small values of $\ell$ one would
+expect $\kappa$ therefore to be equal to one or two,
+unless $m$ (and hence $n$) is selected to be huge.
+So the selection of $\kappa$ is going to also affect 
+how many LWE samples, i.e. $m$, we need to start with
+(see below for a comment on what increasing $m$ means
+for concrete LWE problem instances).
+
+<p>
+
+The $\kappa-1$ chosen parts of the secret key are selected
+to be $p_2,\ldots,p_\kappa$.
+The key aspect now is we are solving a equation
+$$ A \cdot \mathbf{b} =0 \pmod{q} $$
+where the vector $\mathbf{b}$ is of the special form
+$$ \mathbf{b} = [-1,2 p_1 p_2, \ldots, 2 p_2 p_\kappa, 
+             2 p_1 \mathbf{s}_{[\kappa,\ldots,\ell]}, 
+	     2 p_1 \mathbf{e}]. $$
+The algorithm works by guessing the value of $b_2 = \Vert \mathbf{b} \Vert^2$.
+Lemma 3.6 tells us that there are at least $\beta^2$ such choices
+for $\Vert \mathbf{b} \Vert^2$.
+Indeed we have, with high probability
+$$ b_2 \in 1+4 p_1^2 (p_2^2+\ldots+p_\kappa^2) + [0.04,0.27] \cdot 4 p_1^2 \beta^2 (n-\kappa). $$
+
+<p>
+<b>First Main Point:</b>
+This means the complexity seems at this point to be at least $\beta^2$, 
+as we need to guess $b_2$ from a range of size roughly $p_1^2 \beta^2 (n-\kappa)$.
+
+<h4>Section 3.3</h4>
+Section 3.3 then defines a bunch of constants and constraints which enable
+the main quantum subroutine to work, and be successfull in solving the
+underlying LWE problem.
+
+<p>
+Constraint <b>C.3</b> seems to be an issue.
+For the guessed value of $b_2$ we need to find a value $c \in 4 \mathbb{Z}$
+such that
+$$ (c+1) b_2 = p_1 p_2 \cdots p_\kappa, $$
+and we need to select the $p_i$ so that
+$$ p_2 \cdots p_\kappa = -1 \pmod{p_1}.$$
+
+<p>
+The only way I can get things to work out in order would be as
+follows (which is almost what the author suggests):
+<ol>
+	<li>Pick a value for $c \in 4 \mathbb{Z}$.
+	<li>Set $p_1  = c+1$.
+	<li>Use the bound from Lemma 3.6
+		$\sqrt{b_2} \le 3 p_1 \beta \sqrt{n}$
+	    to guess a value for $b_2$, i.e.
+	    $0 \le b_2 \le 9 p_1^2 \beta^2 n$.
+	    We have the constraint $b_2 = 1 \pmod{4 p_1^2}$, so we only need
+	    to consider roughly $2 \beta^2 n$ values for $b_2$.
+	<li>Now factor $b_2$ into coprimes $p_2,\ldots,p_\kappa$ for some $\kappa$ value.
+	<li>Set $A = b_2 - 1 - 4 p_1^2 (p_2^2+\ldots+p_\kappa^2)$.
+	<li>Reject if $A \not\in [0.04,0.27] \cdot 4 p_1^2 \beta^2 (n-\kappa)$.
+		<em>Maybe we dont even bother rejecting such values?</em>
+</ol>
+I cannot get the $p_2 \cdots p_\kappa = -1 \pmod{p_1}$ condition to hold though using
+this method.
+
+<p>
+Suppose our guess for $b_2$ is a prime, and that this is the correct value.
+Then we would have to have $\kappa=2$ and $p_2 = b_2$.
+There seems no reason why we should have $p_2 = -1 \pmod{p_1}$ at this point.
+We would also have
+$$ p_2 = 1+p_1^2 p_2^2 +  [0.04,0.27] \cdot 4 p_1^2 \beta^2 (n-\kappa). $$
+Which obviously cannot hold.
+Thus for this factorization into $p_2 \cdots p_\kappa$ to make sense we
+really need a special value of $b_2$.
+So something seems very weird!
+
+<a name="April16Vadim"></a>
+<h2>Update in Relation to $m \ge \Omega(n \cdot \log q)$</h2>
+As Vadim Lyubashevksy has pointed out to me that the problem
+considered in the paper is really for generic LWE, i.e.
+for a potentially unlimited or large number of samples.
+In real world cryptosystems one has a fixed number of
+basic samples, in particular normally we are only given
+$m=n$ such samples.
+
+<p>
+If the attack requires more samples then we need to generate
+these from the samples we have been given.
+This is done by combining small linear combinations of
+the existing samples.
+But we cannot use too small values in the linear combinations,
+otherwise the input is not random enough for the attack
+algorithm to work.
+Thus we need to pick combinations for which the multipliers
+are small, but not too small.
+But this itself blows up the noise (i.e. the $\alpha$
+value).
+Which makes the attack less practical.
+
+<p>
+For example suppose our input LWE samples are
+$$\mathbf{y} = A \cdot \mathbf{s} + \mathbf{e} \pmod{q} $$
+for an $n \times n$ square matrix $A$.
+Then to generate new samples one would multiply the
+equation on the right by a matrix $R$ which contains
+small values, is not too sparse, but the small values
+are not too small.
+i.e. we would form the system
+$$\mathbf{z} = R \cdot \mathbf{y} = (R \cdot A) \cdot \mathbf{s} 
+   + R \cdot \mathbf{e} \pmod{q}. $$
+But now the noise values have gone up from $\Vert\mathbf{e}\Vert_\infty$
+to $\Vert R \cdot \mathbf{e}\Vert_\infty$.
+This increases the value of $\alpha$, and hence the $\beta$ value
+above, and hence the attack complexity.
 
 </body>
 </html>
