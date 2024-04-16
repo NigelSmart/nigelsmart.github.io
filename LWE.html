@@ -589,8 +589,9 @@ these from the samples we have been given.
 This is done by combining small linear combinations of
 the existing samples.
 But we cannot use too small values in the linear combinations,
-otherwise the input is not random enough for the attack
-algorithm to work.
+otherwise you introduce <em>known</em> small vectors into the resulting
+lattice, which the algorithm then solves for; i.e. it
+ends up solving for vectors which you already know.
 Thus we need to pick combinations for which the multipliers
 are small, but not too small.
 But this itself blows up the noise (i.e. the $\alpha$
