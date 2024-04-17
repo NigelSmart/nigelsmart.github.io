@@ -839,8 +839,10 @@ approximation factors which the algorithm obtains.
 	   	 Thus for large $\beta^2$ (TFHE) this is infeasible. (First Main Point)
 	<li>For small $\beta$ values (Kyber, Dilithium, BGV) the algorithm requires a huge number of LWE
 		samples $m$. (Second Main Point)
-	<li>The algorithm requires $q > c' n \beta^2$ is either too high
-		because $\beta$ is big (TFHE), or because $n = \ell+m+1$ is big (because $\beta$
+	<li>The algorithm requires $q > c' n \beta^2$,
+		which is either too high
+		because $\beta$ is big (TFHE), or it is too high
+		because $n = \ell+m+1$ is big (because $\beta$
 		is small due to the previous point). (Third/Fourth Main Points)
 	<li>Generating large numbers of samples from the fixed number of 
 		samples we have in public key schemes, creates larger values 
