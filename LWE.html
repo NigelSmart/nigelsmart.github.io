@@ -42,6 +42,7 @@ work are.
 Updates to this post are at the bottom
 <ul>
 	<li><a href="#April16">Update on April 16th </a>
+	<li><a href="#April17">Update on April 17th </a>
 </ul>
 
 <h4>Caveats</h4>
@@ -76,7 +77,7 @@ we take a centered reduction in all modular operations.
 
 The value $\alpha$ is used to define a distribution $D$.
 Usually this is chosen to be a Gaussian like distribution on
-$\mathbb{Z}$ with standard deviation $\alpha \cdot q/\sqrt{2 \cdot \pi}$,
+$\mathbb{Z}$ with standard deviation $\alpha \cdot q/\sqrt{2 \pi}$,
 although other distributions (such as a uniform distribution
 with roughly the same standard deviation) could also be used.
 In any case the distribution $D$ produces an integer value 
@@ -465,7 +466,7 @@ yet being peer reviewed, or a quantum computer not yet being built.
 <hr>
 Nigel Smart<br>
 April 15th 2024.
-
+<hr>
 
 <a name="April16"></a>
 <h1>Update April 16th</h1>
@@ -614,6 +615,243 @@ But now the noise values have gone up from $\Vert\mathbf{e}\Vert_\infty$
 to $\Vert R \cdot \mathbf{e}\Vert_\infty$.
 This increases the value of $\alpha$, and hence the $\beta$ value
 above, and hence the attack complexity.
+
+<hr>
+
+Nigel Smart<br>
+April 16th 2024.
+<hr>
+
+<a name="April17"></a>
+<h1>Update April 17th</h1>
+So yesterday I had two problems with the Condition C.3.
+These have been somewhat solved via communication with Yilei.
+<ul>
+<li>
+	The first was the issue of having $p_2 \cdots p_\kappa = -1 \pmod{p_1}$.
+	It turns out this was only done to avoid having to carry around another
+	variable of $c' = p_2 \cdots p_\kappa \pmod{p_1}$. 
+	So we can ignore this.
+<li>
+	The second problem was the bound of $p_i \le (\log n)/p_1$ for $i>2$.
+	If you impose this condition then there is simply not enough odd coprime
+	$p_i$'s to make the algorithm work unless $n$ is super big, think $2^{10^x}$
+	for some largish $x$. Thus if you keep this condition then the algorithm is
+	certainly not practically feasible in any sense of the word.
+	Yilei pointed out to me that this condition is also not needed (except
+	to get a nice approximation factor) and one can replace it with $p_i = O(\log n)$ 
+	and perhaps even $p_i \le 10 \log n$.
+	In another direction one could take $\kappa = O(1)$ and perhaps $\kappa = 10$.
+</ul>
+
+<p>
+
+<h2>Revisiting Condition C.3</h2>
+
+With these points in mind let us revisit C.3 and come up with an algorithm taking
+into account the two fixes of either assuming $p_i \le 10 \log n$, or
+assuming $\kappa$ is fixed.
+
+<h4>Option A: Setting $p_i \le 10 \log n$</h4>
+<ol>
+	<li>Pick a value for $\kappa$ (to be determined).
+	<li>Pick a value for $c \in 4 \mathbb{Z}$, say $c=4$.
+	<li>Set $p_1  = c+1$, i.e. $p_1=5$.
+	<li>Pick odd coprime values $p_2,\ldots,p_\kappa$ (coprime also to $p_1$)
+		subject to $p_i \approx 10 \log n$.
+</ol>
+The question is, how big should we pick $\kappa$?
+
+<p>
+Again, we know $b_2 = p_2 \cdots p_\kappa$ and we also know that (assuming $\kappa>4$)
+that the size of $b_2$ will dominated by the term $p_1^2 \beta^2 (n-\kappa)$.
+Since $\kappa$ is tiny compared to $n$ we basically get something like
+$$ p_i^{\kappa-1} \approx p_1^2 n \beta^2. $$
+Recall, we have $\beta = \sqrt{8 \pi}$ for Kyber and BGV,
+$\beta = \sqrt{64 \pi/3}$ for Dilithium, and
+$\beta =2^{32}$ for TFHE.
+This is assuming $\beta$ has not needed to be increased due to the need to generate
+more samples as explained <a href="April16Vadim">above</a>, so these assumptions
+on $\beta$ are the best possible scenario.
+
+<p>
+When $\beta = \sqrt{8  \pi}$ we see we need
+$$ (\kappa-1) \log ( 10  \log n) \approx 2 \log (p_1 \beta) + \log n
+				            \approx 6.443 + \log n. $$
+i.e.
+$$ \kappa \approx \frac{6.443+\log n}{\log (10 \log n)}+1. $$
+Note, to get $\kappa>4$ this means we need an $n$ bigger than $2^{29}$ here.
+This is a lot of LWE samples by any stretch of the imagination.
+
+<p>
+When $\beta=2^{32}$ we obtain
+$$ (\kappa-1)  \log ( 10 \log n) \approx 2 \log (p_1 \beta) + \log n
+				            \approx 47.58 + \log n. $$
+i.e.
+$$ \kappa \approx \frac{47.58 + \log n}{\log (10 \log n) }+1. $$
+Note, we always obtain $\kappa>4$ here, irrespective of the value of $n$.
+
+
+<h4>Option B: Setting $\kappa=10$</h4>
+<ol>
+	<li>Pick $\kappa=10$. In any case pick $\kappa > 4$.
+	<li>Pick a value for $c \in 4 \mathbb{Z}$, say $c=4$.
+	<li>Set $p_1  = c+1$, i.e. $p_1=5$.
+	<li>Pick odd coprime values $p_2,\ldots,p_\kappa$ (coprime also to $p_1$).
+</ol>
+Now the question is, how big should we pick the coprime values $p_2,\ldots,p_\kappa$?
+
+<p>
+Again, we know $b_2 = p_2 \cdots p_\kappa$ and we also know that (assuming $\kappa>4$)
+that the size of $b_2$ will dominated by the term $p_1^2 \beta^2 (n-\kappa)$.
+Since $\kappa$ is tiny compared to $n$ we basically get something like
+$$ p_i^{\kappa-1} \approx p_1^2 n \beta^2. $$
+So 
+$$ \log p_i \approx \frac{2 \log (p_1 \beta) + \log n}{\kappa-1}. $$
+
+<p>
+Using $\beta = \sqrt{8 \pi}$ we see we need
+$$ \log p_i \approx 0.715 + \frac{\log n}{9}.$$
+i.e.
+$$ p_i \approx 2 n^{1/9}.$$
+However to obtain $\kappa=10$ such coprime values we would need $2 n^{1/9} \ge 31$, 
+i.e. $n>2^{35}$.
+Which again is a large number of samples.
+
+<p>
+Using $\beta = 2^{32}$ we see we need
+$$ \log p_i \approx 5.286 + \frac{\log n}{9}.$$
+i.e.
+$$ p_i \approx 198 n^{1/9}.$$
+Any value of $n$ would result in such coprime values existing.
+
+<h4>Summary of C.3</h4>
+By weakening the approximation factors we can select kind of practical values
+for the coprimes $p_1,\ldots,p_\kappa$ and the value $\kappa$.
+We see that for Kyber, Dilthium and BGV the number of samples $m$ required
+is going to be very large to enable a choice of such coprimes,
+however for TFHE the $\beta$ value is so large that the existing of
+such coprimes is immediate, since this forces $b_2$ to be very large indeed.
+
+<p>
+<b>Second Main Point:</b>
+For small values of $\beta$ the number of samples required to enable
+the attack to work is going to be very large indeed.
+
+
+<h2>Continueing with Section 3.3</h2>
+Having picked our values for $p_1,\ldots,p_\kappa$ we have fixed our
+guess for $b_2$.
+But this guess may be wrong. Indeed it's probability of being correct
+is around 
+$$ \frac{1}{\beta^2 p_1^2 (n-k)}. $$
+So we need to keep performing the attack, tweaking the parameters
+via randomizing the input samples (as described <a href="April16Vadim">above</a>.
+Until the attack works.
+
+<p>
+So we reiterate our first main point from above
+
+<p>
+
+<b>First Main Point (Recap):</b>
+The complexity is at least $\beta^2$.
+
+<p>
+
+So if $\beta^2$ is large, as it is in TFHE this is already a no-go.
+
+<p>
+Let us continueing assuming $b_2$ is correct.
+
+<p>
+So having picked our coprime values we need to pick a value for $D$,
+which the paper says should be odd and $O((\log n)^2)$.
+For the moment let us assume this is picked.
+
+<p>
+We then set
+$$ M = 2 (c+1) D^2 b_2$$
+$$ P = M^2/2$$
+$$ u^2 = D^2 b_2$$
+
+<p>
+Now we need to fix $t^2$ which is defined as
+$$ t^2 = \frac{M}{2}-u^2.$$
+This ensures that Condition C.2 is satisfied.
+
+<p>Note
+$$ \frac{t^2}{u^2} = \frac{M}{2 u^2}-1
+                   = \frac{2 (c+1) D^2 b_2}{2 u^2}-1
+                   = \frac{2 (c+1) D^2 b_2}{2 D^2 b_2}-1
+		   = (c+1)-1 = c.
+$$
+So Condition C.1 is satisfied already. The only thing in Condition C.1 we have
+not satisfied is having $\sqrt{c} \in (64 (\log n)^3, 65 (\log n)^3)$.
+
+<p>
+We then need to pick a value for $r$ from Condition C.4. 
+The relevant inequalies are
+$$ M \le r \le \frac{P}{2 \log n} = \frac{M^2}{4 \log n} $$
+and
+$$ r \le \frac{D q}{2 (\log n)^3}. $$
+Note the second inequality imples the following 
+$$ \frac{D q}{2 (\log n)^3} \ge M = 2 (c+1) D^2 b_2 $$
+i.e.
+$$ q \ge 4 (c+1) D b_2 (\log n)^3 \approx 4 (c+1) D (\log n)^3 p_1^2 n \beta^2. $$
+Plugging in our values above we see that we have
+$$ q \ge c' n \beta^2, $$
+for some value $c'$ which we can ignore.
+
+<p>
+
+<b>Third Main Point:</b>
+Note, that this means the attack does not apply to TFHE's standard
+parameters, since we have $\beta \approx \sqrt{q}$, and the multiplication by 
+$n$ results in $q$ being too small in TFHE for the attack to apply.
+
+<p>
+
+<b>Fourth Main Point:</b>
+The attack does not apply to Kyber, Dilithium or BGV as here the large
+value of $n$ needed (discussed above) implies the used value of $q$ used
+in these schemes is also too small.
+
+<p>
+
+In Condition C.7 the value of $r$ is actually chosen to be
+$$ r = \frac{u t^3}{4 \log n}. $$
+
+<p>
+
+The final parameter to pick is $s^2$, which is chosen from Condition C.5 by
+$$ s^2 =  2 u^2 t^2 + \epsilon. $$
+
+<p>
+
+There are then some extra conditions, Condition C.6 and C.7, which define
+ranges for various parameters. My understanding is that these impact the
+approximation factors which the algorithm obtains.
+
+<h2>Summary from April 17th</h2>
+<ol>
+	<li>The algorithm definitely requires $O(\beta^2)$ repetitions.
+	   	 Thus for large $\beta^2$ (TFHE) this is infeasible. (First Main Point)
+	<li>For small $\beta$ values the algorithm requires a huge number of LWE
+		samples $m$. (Second Main Point)
+	<li>The algorithm requires $q > c' n \beta^2$ is either too high
+		because $\beta$ is big, or because $n = \ell+m+1$ is big (because $\beta$
+		is small due to the previous point). (Third/Fourth Main Points)
+	<li>Generating large numbers of samples from the fixed number of 
+		samples we have in public key schemes, creates larger values 
+		of $\beta$ than considered here. 
+		This makes the attack less practical.
+</ol>
+
+<hr>
+Nigel Smart<br>
+April 17th 2024.
+<hr>
 
 </body>
 </html>
