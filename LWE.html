@@ -43,6 +43,7 @@ Updates to this post are at the bottom
 <ul>
 	<li><a href="#April16">Update on April 16th </a>
 	<li><a href="#April17">Update on April 17th </a>
+	<li><a href="#April18">Update on April 18th </a>
 </ul>
 
 <h4>Caveats</h4>
@@ -849,6 +850,103 @@ approximation factors which the algorithm obtains.
 		of $\beta$ than considered here. 
 		This makes the attack less practical.
 </ol>
+
+<hr>
+Nigel Smart<br>
+April 17th 2024.
+<hr>
+
+
+<a name="April18"></a>
+<h1>Update April 18th</h1>
+Dave Archer asked me some questions related to BGV stlye FHE so I decided
+to have a more detailed look at this. 
+For the description of BGV and the noise equations I refer to the
+relatively <a href="https://eprint.iacr.org/2012/099">old paper</a> of 
+Gentry, Halevi and myself (called the GHS paper below) where we evaluate 
+the AES circuit using BGV.
+However GHS only looks at plaintext modulus $p=2$, the extension
+of these formulae for other plaintext spaces was done in 
+<a href="https://eprint.iacr.org/2015/889">another paper</a> of Costache and 
+myself (called the CS paper below).
+
+<p>
+
+I use these papers as these are the ones I know best, so it is quicker to 
+use them to do a quick-and-dirty analysis. 
+More modern papers, with more tuned noise equations, will have a similar
+analysis, so the overall conclusions should <em>roughly</em> be the same.
+
+<p>
+
+The main difference between GHS/CS and perhaps more modern papers is that
+the secret key is given with a fixed hamming weight in GHS, whereas more
+modern papers performs rejection sampling on the secret key in order
+to obtain a secret key with low canonical norm.
+For both methods we can assume that they produce secret keys with the
+same low canonical norm, they just do it in different ways.
+<ul>
+	<li>The canonnical norm bounds give us high probability bounds
+		on the canonical norm of the noise term, these are
+		roughly speaking (upto a small constant, a product of
+		something called the ring constant in GHS and the inverse of 
+		the small constant obtained from the $\mathsf{erfc}$ function) 
+		the same as the $\beta$ values given above.
+		So in what follows we will just assume the canonical
+		norm bounds correspond to $10 \cdot \beta$, which 
+		equates to an error probability of around $2^{-80}$.
+		This can be made more precise, but again with little
+		change to the overall analysis.
+</ul>
+
+<p>
+
+Recall the key points above:
+<ul>
+	<li>If $\beta$ is small we need a lot of LWE samples $m$
+            to make the attack work, and in BGV the public key has a very small $\beta$,
+            i.e. $\beta = \sqrt{8 \pi}$.
+	<li>But recall the discussion arising from a <a href="#April16Vadim">discussion with Vadim Lyubashevksy</a>.
+	    To generate these extra samples itself increaes the noise value $\beta$.
+</ul>
+Now in the GHS/CS papers the noise formulae for producing new encryptions
+are given, after all it is vital to understand how BGV operates in
+order to give these formulae.
+
+<p>
+The method for public key encryption produces ciphertexts whose noise term
+has canonical norm bounded by a constant called $B_{\mathsf{clean}}$.
+Roughly speaking we have
+$$ B_{\mathsf{clean}} = O(p \cdot \ell). $$
+However, we can then perform a modulus switch to obtain a ciphertext,
+with a smaller ciphertext modulus $q$, whose noise term has canonical norm bounded by
+$B_{\mathsf{scale}}$.
+Roughly speaking we have
+$$ B_{\mathsf{scale}} = O(p \cdot \sqrt{\ell}). $$
+The implied constants here in the big-Oh's are small integers (think fifty or less).
+When performing the modulus switch the smallest modulus we can use
+is something of size slightly roughly $4 \cdot B_{\mathsf{scale}}$.
+
+<p>
+
+This would result in a BGV scheme with
+<ul>
+	<li>$\beta \approx 50  p  \sqrt{\ell}/10 = 5 p \sqrt{\ell} =  O(p \cdot \sqrt{\ell})$.
+	<li>$q \approx 100 p \sqrt{\ell} = O(p \cdot \sqrt{\ell})$.
+</ul>
+i.e. the $\alpha$ value would be the constant value of about $1/20$.
+
+<p>
+
+Recall the complexity of the attack is at least $O(\beta^2)$ so we would have
+a complexity of at least $O(p^2 \cdot \ell)$.
+
+<p>
+
+<b>Fifth Main Point:</b>
+BGV with large plaintext modulus (as used for example in the 
+<a href="https://eprint.iacr.org/2011/535">SPDZ protocol</a>) 
+is immune from the attack it seems.
 
 <hr>
 Nigel Smart<br>
