@@ -920,7 +920,7 @@ Roughly speaking we have
 $$ B_{\mathsf{clean}} = O(p \cdot \ell). $$
 However, we can then perform a modulus switch to obtain a ciphertext,
 with a smaller ciphertext modulus $q$, whose noise term has canonical norm bounded by
-$B_{\mathsf{scale}}$.
+$2 B_{\mathsf{scale}}$.
 Roughly speaking we have
 $$ B_{\mathsf{scale}} = O(p \cdot \sqrt{\ell}). $$
 The implied constants here in the big-Oh's are small integers (think fifty or less).
@@ -931,10 +931,10 @@ is something of size slightly roughly $4 \cdot B_{\mathsf{scale}}$.
 
 This would result in a BGV scheme with
 <ul>
-	<li>$\beta \approx 50  p  \sqrt{\ell}/10 = 5 p \sqrt{\ell} =  O(p \cdot \sqrt{\ell})$.
+	<li>$\beta \approx 2 \cdot 50  p  \sqrt{\ell}/10 = 10 p \sqrt{\ell} =  O(p \cdot \sqrt{\ell})$.
 	<li>$q \approx 400 p \sqrt{\ell} = O(p \cdot \sqrt{\ell})$.
 </ul>
-i.e. the $\alpha$ value would be the constant value of about $1/80$.
+i.e. the $\alpha$ value would be the constant value of about $1/40$.
 
 <p>
 
